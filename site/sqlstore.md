@@ -2,11 +2,11 @@
 
 A lightweight ORM/storage implementation with strong caching. It uses JDBC for communication with databases.
 
-* [Basics](sqlstore/Basics.md)
-* [Mapping definition](sqlstore/Mapping.md)
-* [Queries](sqlstore/Query.md)
-* [Transactions](sqlstore/Transactions.md)
-* [Object and query caches](sqlstore/Caches.md)
+* [Basics](sqlstore/Basics.html)
+* [Mapping definition](sqlstore/Mapping.html)
+* [Queries](sqlstore/Query.html)
+* [Transactions](sqlstore/Transactions.html)
+* [Object and query caches](sqlstore/Caches.html)
 
 ## Status
 

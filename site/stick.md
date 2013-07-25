@@ -2,6 +2,6 @@
 
 URL Routing and middleware support.
 
-  * [URL Routing](stick/route.md)
+  * [URL Routing](stick/route.html)
   * Other middlewares..
   * Write your own middleware

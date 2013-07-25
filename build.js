@@ -8,6 +8,8 @@ var markdown = require('ringo/markdown');
 var parser = new Parser();
 parser.addOption("c", "contentdir", "contentdir", "Path to content directory");
 parser.addOption("o", "outputdir", "outputdir", "Write .html files into this directory");
+parser.addOption("b", "baseuri", "baseuri", "Base URI prepended to all links");
+
 
 function renderMarkdown(file) {
     return markdown.process(fs.read(file), {
@@ -33,7 +35,8 @@ var buildFile = function(path) {
       return;
    }
    var context = {
-      content: renderMarkdown(path)
+      content: renderMarkdown(path),
+      baseUri: opts.baseuri || '/'
    };
    var html = mustache.to_html(masterContent, context);
    var relativePath = fs.relative(opts.contentdir, path);
