@@ -2,11 +2,12 @@
 
 A lightweight ORM/storage implementation with strong caching. It uses JDBC for communication with databases.
 
-* [Basics](sqlstore/Basics.html)
 * [Mapping definition](sqlstore/Mapping.html)
 * [Queries](sqlstore/Query.html)
 * [Transactions](sqlstore/Transactions.html)
 * [Object and query caches](sqlstore/Caches.html)
+
+VirtueJs takes care of setting up the database but this process is also explained in sqlstore's [configuration help page](sqlstore/Basics.html). Creating your own Store gives you more control over your DB connection and the caches.
 
 ## Status
 

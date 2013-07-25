@@ -38,12 +38,15 @@
     <div class="content">
       <p>VirtueJs is a loosely coupled web application framework on top of <a href="http://ringojs.org">RingoJs</a>. It pulls together the best of breed Ringo packages to provide templating, a view engine and an ORM.</p>
 
-<p>If you are a Java developer and want to give a dynamic language a shot, Virtue is your best choice.</p>
+<p>If you are a Java developer and want to give a dynamic language a shot, VirtueJs makes a lot of sense because we have good <a href="http://ringojs.org/documentation/java_integration">Java integration</a>.</p>
+
+<p>If you are a seasoned JavaScript developer, you'll enjoy the modern JavaScript as well as Ringo's <a href="http://ringojs.org/api/master/index.html">standard library</a> and <a href="http://ringojs.org/documentation">tools</a>.</p>
 
 <p>Example view code:</p>
 
+<pre class="sh_javascript"><code>  app.configure('error', 'notfound', 'route');
 
-<pre class="sh_javascript"><code>    app.get('/helloworld', function() {
+    app.get('/helloworld', function() {
        return templates.renderResponse('users.html', {
           user: User.all()
        });
@@ -64,7 +67,6 @@
 
 <p>Defining database models:</p>
 
-
 <pre class="sh_javascript"><code>var User = db.defineEntity('User', {
    properties: {
       firstname: 'string',
@@ -81,14 +83,14 @@
 <pre class="sh_javascript"><code>var hashMap = new java.util.HashMap();
 hashMap.put('foo', 'testing');</code></pre>
 
-
+<p>We consider Java Integration one of our killer features. If you're into Java, this should get you excited: <a href="http://ringojs.org/documentation/java_integration">Java Integration in Ringo</a></p>
 
 
     </div>
 
     <div class="submenu">
       <div class="wrapper">
-        
+        <!--  -->
       </div>
     </div>
 

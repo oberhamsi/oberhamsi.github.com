@@ -36,56 +36,15 @@
   <main class="main">
 
     <div class="content">
-      <p>This installs <code>get</code>, <code>post</code>, <code>put</code>, and <code>del</code> methods in the application
-object for routing requests with the corresponding HTTP methods. These
-methods take a path spec as first argument and a function as second argument.</p>
+      <p>gitdir: /home/simon/oberhamsi.github.com/.git/modules/external/sqlstore</p>
 
-<h3>Paths and Placeholders</h3>
-
-<p>The path spec can consist of static parts and placeholders.
-Named placeholders are prefixed by <code>:</code> (colon) and match all
-characters except for <code>/</code> (slash) and <code>.</code> (dot). A named
-placeholder can be marked as optional by appending <code>?</code> (question mark).
-Unnamed placeholders are denoted by the asterisk character <code>*</code> and match
-all characters including slashes and dots.</p>
-
-<p>In the following example, ":id" is a named placeholder:</p>
-
-<pre class="sh_javascript"><code>"/post/:id"</code></pre>
-
-<p>All placeholders are passed to the action function as positional arguments
-following the request object in the order in which they appear in the path spec.
-Unmatched optional placeholders will be <code>undefined</code>.</p>
-
-<pre class="sh_javascript"><code>app.get("/post/:id", function(req, id) {...});</code></pre>
-
-<h3>Reverse Routing</h3>
-
-<p>The route middleware supports generating URLs from route names and parameters
-required by the route.</p>
-
-<p>Routes names are derived from the route's path spec by stripping
-out all placeholders and removing a leading slash. For example, a path
-spec <code>/post/:id.html</code> results in route name "post.html". If a path spec
-does not contain any static part, its route name is "index".</p>
-
-<p>Passing a valid route name and the parameters required by the route to the <code>route.reverse</code>
-method will return the URI path for the corresponding action. For example,
-with a route spec <code>/post/:id.html</code>, calling <code>app.route.reverse({action: "post.html", id: 5})</code>
-will return the string "/post/5.html".</p>
-
-<pre class="sh_javascript"><code>app.get("/", function() {...})
-app.post("/", function(req) {...})
-app.get("/:id.:format?", function(req, id, format) {...})
-app.del("/:id", function(req, id) {...})
-app.put("/:id", function(req, id) {...})</code></pre>
 
 
     </div>
 
     <div class="submenu">
       <div class="wrapper">
-        
+        <!--  -->
       </div>
     </div>
 

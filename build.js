@@ -1,6 +1,7 @@
 var {Parser} = require("ringo/args");
 var system = require('system');
 var fs = require("fs");
+var {command} = require('ringo/subprocess');
 var mustache = require('ringo/mustache');
 var markdown = require('ringo/markdown');
 
@@ -55,10 +56,17 @@ var traverse = function(path) {
 
 if (require.main === module) {
    var opts = parser.parse(system.args.slice(1));
-   var masterContent = fs.read(module.resolve('./templates/master.html'));
+   var masterTemplatePath = module.resolve('./templates/master.html');
+   var masterContent = fs.read(masterTemplatePath);
    if (!opts.outputdir) {
       opts.outputdir = module.resolve('./virtuejs')
    }
    traverse(opts.contentdir);
    fs.copyTree(module.resolve('./static'), fs.join(opts.outputdir, 'static/'));
+   var stickDestination = fs.join(opts.outputdir, 'stick');
+   fs.removeTree(stickDestination)
+   var renderStickApi = "ringo-doc --template " + masterTemplatePath +
+    ' -s external/stick/lib/ -d ' + stickDestination +
+    ' -p external/stick/package.json -n "Stick API"';
+   var ret = command(renderStickApi);
 }

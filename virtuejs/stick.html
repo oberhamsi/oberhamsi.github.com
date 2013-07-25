@@ -38,18 +38,39 @@
     <div class="content">
       <h1>Views and routing</h1>
 
-<p>URL Routing and middleware support.</p>
+<h3>URL routing</h3>
 
-<ul><li><a href="stick/route.html">URL Routing</a></li>
-<li>Other middlewares..</li>
-<li>Write your own middleware</li></ul>
+<ul><li><a href="stick/middleware/route/">routing reference</a></li>
+<li><a href="http://ringojs.org/tutorial/stickapp.md">tutorial page</a></li></ul>
+
+<h3>Middleware</h3>
+
+<p>The following middleware is activated by VirtueJs for the whole application. These give you access to the query and post parameters, URL routing and some other features:</p>
+
+<ul><li><a href="stick/middleware/route/">URL routing</a></li>
+<li><a href="stick/middleware/params/">query params</a></li>
+<li><a href="stick/middleware/error/">error page</a> only active if <code>debug=true</code></li>
+<li><a href="stick/middleware/cookies/">cookies</a></li></ul>
+
+<p>Other available middleware:</p>
+
+<ul><li><a href="stick/middleware/upload/">file upload</a></li>
+<li><a href="stick/middleware/session/">session support</a> </li>
+<li><a href="stick/middleware/basicauth/">http basic authentication</a></li>
+<li><a href="stick/middleware/static/">static resource serving</a> </li>
+<li><a href="stick/middleware/notfound/">not found page</a></li>
+<li><a href="stick/middleware/etag/">etag</a></li>
+<li><a href="stick/middleware/profiler/">performance profiler</a></li>
+<li><a href="stick/middleware/gzip">gzip compression</a></li></ul>
+
+<p>And there is a help page on how to <a href="http://ringojs.org/documentation/jsgi_and_stick">write your own middleware</a>.</p>
 
 
     </div>
 
     <div class="submenu">
       <div class="wrapper">
-        
+        <!--  -->
       </div>
     </div>
 

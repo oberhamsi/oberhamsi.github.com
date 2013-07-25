@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://localhost/virtuejs//static/main.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/sh_hns.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/tutorial.css" />
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_main.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://localhost/virtuejs//static/html5.js"></script>
+<![endif]-->
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="../static/jsdoc.css" />
+<link rel="stylesheet" href="../static/style.css" />
+<script type="text/javascript" src="../static/jquery.min.js"></script>
+<script type="text/javascript" src="../static/jsdoc.js"></script>
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="http://localhost/virtuejs/"><img src="http://localhost/virtuejs//static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="http://localhost/virtuejs//get_started.html">Get Started</a></li>
+        <li><a href="http://localhost/virtuejs//reinhardt.html">The template layer</a></li>
+        <li><a href="http://localhost/virtuejs//sqlstore.html">The model layer</a></li>
+        <li><a href="http://localhost/virtuejs//stick.html">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      
+            <h1 class="modulename">Module stick</h1>
+        <div class="fileoverview">
+            <p>The <code>stick</code> module provides the <code>Application</code> class
+which is the centerpiece of the Stick framework.</p>
+
+<p>A Stick Application
+is a JSGI application which provides means to compose complex
+applications out of modular middleware components.</p>
+
+
+        </div>
+
+        <div class="classoverview">
+
+            <div class="classes">
+                                <h2>Class <a href="#Application" class="jsdoc-title">Application</a></h2>
+                                <h3>Instance Methods</h3>
+                <ul class="propertyoverview">
+                                        <li>
+                        <a href="#Application.prototype.configure" class="jsdoc-title"> configure</a>(middleware...)
+                    </li>
+                                        <li>
+                        <a href="#Application.prototype.env" class="jsdoc-title"> env</a>(name)
+                    </li>
+                    </ul>
+                                <h3>Instance Properties</h3>
+                <ul class="propertyoverview">
+                                        <li>
+                        <a href="#Application.prototype.base" class="jsdoc-title"> base</a>
+                    </li>
+                                        <li>
+                        <a href="#Application.prototype.request" class="jsdoc-title"> request</a>
+                    </li>
+                    </ul>
+                </div>
+        </div>
+        <div class="details">
+                        <hr />
+            <!-- tpl-docitem -->
+            <div class="docitem" data-docitem="Application">
+                <h3 class="classtitle">
+                    <span class="itemtitle"><a id="Application" href="#Application" class="itemtitle itemname">Application</a></span>
+                    <span class="itemtitle light">(nested)</span></h3>
+                <div>
+                    <p>The application object is a JSGI application that wraps a middleware chain.</p>
+
+<p>When invoked without arguments, the <code>Application</code> constructor returns
+an application that wraps an <code>unhandled</code> middleware that throws an Error
+when called. Use <a href="#Application.prototype.configure" title="Application.prototype.configure">configure</a> to add
+middleware modules to the application.</p>
+
+<p>When invoked with an argument, it is used as initial value for the
+application's middleware chain.</p>
+
+
+                </div>
+                                <div>
+                    <h4>Parameters</h4>
+                    <table>
+                                                <tr>
+                            <td>function</td>
+                            <td class="paramname">nested</td>
+                            <td>the nested application (optional)</td>
+                        </tr>
+                        </table>
+                </div>
+                </div>
+                        <hr />
+            <!-- tpl-docitem -->
+            <div class="docitem" data-docitem="Application.prototype.base">
+                <h3 >
+                    <span class="itemtitle">Application.prototype.<a id="Application.prototype.base" href="#Application.prototype.base" class="itemtitle itemname">base</a></span>
+                    </h3>
+                <div>
+                    <p>This application's base URI path as used by the current request,
+or null if unknown.</p>
+
+
+                </div>
+                </div>
+                        <hr />
+            <!-- tpl-docitem -->
+            <div class="docitem" data-docitem="Application.prototype.configure">
+                <h3 >
+                    <span class="itemtitle">Application.prototype.<a id="Application.prototype.configure" href="#Application.prototype.configure" class="itemtitle itemname">configure</a></span>
+                    <span class="itemtitle light">(middleware...)</span></h3>
+                <div>
+                    <p>Apply one or more middleware factories to this Application. Middleware will
+be wrapped around the existing middleware chain, starting with the rightmost
+argument. For example, the following invocation of configure on a newly
+created Application object:</p>
+
+<pre><code>app.configure("error", "route");</code></pre>
+
+<p>will result in <code>error(route(unhandled()))</code> as middleware chain.</p>
+
+
+                </div>
+                                <div>
+                    <h4>Parameters</h4>
+                    <table>
+                                                <tr>
+                            <td></td>
+                            <td class="paramname">middleware...</td>
+                            <td>one or middleware factories. These can be
+defined as module names, imported modules, or middleware factories.
+For the middleware that is part of Stick it is sufficient to
+use the last part of the module id. e.g. "error" or "route".</td>
+                        </tr>
+                        </table>
+                </div>
+                </div>
+                        <hr />
+            <!-- tpl-docitem -->
+            <div class="docitem" data-docitem="Application.prototype.env">
+                <h3 >
+                    <span class="itemtitle">Application.prototype.<a id="Application.prototype.env" href="#Application.prototype.env" class="itemtitle itemname">env</a></span>
+                    <span class="itemtitle light">(name)</span></h3>
+                <div>
+                    <p>Returns an Application object that shares the middleware chain of the original application,
+but can be configured to contain additional middleware that is not shared with the parent application.</p>
+
+<p>Repeated calls of the env method with the same argument return the same application object.</p>
+
+
+                </div>
+                                <div>
+                    <h4>Parameters</h4>
+                    <table>
+                                                <tr>
+                            <td>string</td>
+                            <td class="paramname">name</td>
+                            <td>the environment name</td>
+                        </tr>
+                        </table>
+                </div>
+                </div>
+                        <hr />
+            <!-- tpl-docitem -->
+            <div class="docitem" data-docitem="Application.prototype.request">
+                <h3 >
+                    <span class="itemtitle">Application.prototype.<a id="Application.prototype.request" href="#Application.prototype.request" class="itemtitle itemname">request</a></span>
+                    </h3>
+                <div>
+                    <p>The request object associated with the current thread, or null.</p>
+
+
+                </div>
+                </div>
+            </div>
+    
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        <!-- <div class="jsdocSidenav">
+   <div class="toggles">
+      <a href="../">&bull; Modules</a>
+      <a href="../index_all.html">&bull; Overview</a>
+   </div>
+
+   <input id="filter" type="text" placeholder="Filter modules" />
+
+   <ul id="modulelist">
+            <li><a href="../stick/">stick</a></li>
+            <li><a href="../helpers/">stick/helpers</a></li>
+            <li><a href="../middleware/">stick/middleware</a></li>
+            <li><a href="../middleware/basicauth/">stick/middleware/basicauth</a></li>
+            <li><a href="../middleware/continuation/">stick/middleware/continuation</a></li>
+            <li><a href="../middleware/cookies/">stick/middleware/cookies</a></li>
+            <li><a href="../middleware/error/">stick/middleware/error</a></li>
+            <li><a href="../middleware/etag/">stick/middleware/etag</a></li>
+            <li><a href="../middleware/gzip/">stick/middleware/gzip</a></li>
+            <li><a href="../middleware/method/">stick/middleware/method</a></li>
+            <li><a href="../middleware/mount/">stick/middleware/mount</a></li>
+            <li><a href="../middleware/notfound/">stick/middleware/notfound</a></li>
+            <li><a href="../middleware/params/">stick/middleware/params</a></li>
+            <li><a href="../middleware/profiler/">stick/middleware/profiler</a></li>
+            <li><a href="../middleware/render/">stick/middleware/render</a></li>
+            <li><a href="../middleware/requestlog/">stick/middleware/requestlog</a></li>
+            <li><a href="../middleware/route/">stick/middleware/route</a></li>
+            <li><a href="../middleware/session/">stick/middleware/session</a></li>
+            <li><a href="../middleware/static/">stick/middleware/static</a></li>
+            <li><a href="../middleware/upload/">stick/middleware/upload</a></li>
+      </ul>
+</div>
+ -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="http://localhost/virtuejs//reinhardt/templates.html">Syntax overview</a></li>
+        <li><a href="http://localhost/virtuejs//reinhardt/filters.html">Filter reference</a></li>
+        <li><a href="http://localhost/virtuejs//reinhardt/tags.html">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="http://localhost/virtuejs//sqlstore/Basics.html">Connecting to the database</a></li>
+        <li><a href="http://localhost/virtuejs//sqlstore/Mapping.html">Model mapping</a></li>
+        <li><a href="http://localhost/virtuejs//sqlstore/Query.html">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="http://localhost/virtuejs//stick/route.html">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="http://localhost/virtuejs//deployment.html">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+</body>
+</html>

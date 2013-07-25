@@ -1,9 +1,12 @@
 VirtueJs is a loosely coupled web application framework on top of [RingoJs](http://ringojs.org). It pulls together the best of breed Ringo packages to provide templating, a view engine and an ORM.
 
-If you are a Java developer and want to give a dynamic language a shot, Virtue is your best choice.
+If you are a Java developer and want to give a dynamic language a shot, VirtueJs makes a lot of sense because we have good [Java integration](http://ringojs.org/documentation/java_integration).
+
+If you are a seasoned JavaScript developer, you'll enjoy the modern JavaScript as well as Ringo's [standard library](http://ringojs.org/api/master/index.html) and [tools](http://ringojs.org/documentation).
 
 Example view code:
 
+      app.configure('error', 'notfound', 'route');
 
 		app.get('/helloworld', function() {
 		   return templates.renderResponse('users.html', {
@@ -26,7 +29,6 @@ A simple template example:
 
 Defining database models:
 
-
 	var User = db.defineEntity('User', {
 	   properties: {
 	      firstname: 'string',
@@ -43,3 +45,4 @@ Talking to Java:
 	var hashMap = new java.util.HashMap();
 	hashMap.put('foo', 'testing');
 
+We consider Java Integration one of our killer features. If you're into Java, this should get you excited: [Java Integration in Ringo](http://ringojs.org/documentation/java_integration)

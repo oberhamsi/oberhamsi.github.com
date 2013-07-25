@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://localhost/virtuejs//static/main.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/sh_hns.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/tutorial.css" />
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_main.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://localhost/virtuejs//static/html5.js"></script>
+<![endif]-->
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="../../static/jsdoc.css" />
+<link rel="stylesheet" href="../../static/style.css" />
+<script type="text/javascript" src="../../static/jquery.min.js"></script>
+<script type="text/javascript" src="../../static/jsdoc.js"></script>
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="http://localhost/virtuejs/"><img src="http://localhost/virtuejs//static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="http://localhost/virtuejs//get_started.html">Get Started</a></li>
+        <li><a href="http://localhost/virtuejs//reinhardt.html">The template layer</a></li>
+        <li><a href="http://localhost/virtuejs//sqlstore.html">The model layer</a></li>
+        <li><a href="http://localhost/virtuejs//stick.html">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      
+            <h1 class="modulename">Module stick/middleware/profiler</h1>
+        <div class="fileoverview">
+            <p>This module provides profiling middleware to measure
+the application's runtime behaviour.</p>
+
+<p>Profiler data is written to the module's logger. You have to run the
+application in interpreted mode (passing <code>-o -1</code> on the command line)
+to get meaningful results.</p>
+
+
+        </div>
+
+        <div class="classoverview">
+
+                        <h2 class="functions">Functions</h2>
+            <ul class="functions propertyoverview">
+                                <li>
+                    <a href="#middleware" class="jsdoc-title"> middleware</a>(next, app)
+                </li>
+                </ul>
+            <div class="classes">
+                </div>
+        </div>
+        <div class="details">
+                        <hr />
+            <!-- tpl-docitem -->
+            <div class="docitem" data-docitem="middleware">
+                <h3 >
+                    <span class="itemtitle"><a id="middleware" href="#middleware" class="itemtitle itemname">middleware</a></span>
+                    <span class="itemtitle light">(next, app)</span></h3>
+                <div>
+                    <p>A middleware factory that runs the nested app with a runtime profiler.</p>
+
+
+                </div>
+                                <div>
+                    <h4>Parameters</h4>
+                    <table>
+                                                <tr>
+                            <td>Function</td>
+                            <td class="paramname">next</td>
+                            <td>the wrapped middleware chain</td>
+                        </tr>
+                                                <tr>
+                            <td>Object</td>
+                            <td class="paramname">app</td>
+                            <td>the Stick Application object</td>
+                        </tr>
+                        </table>
+                </div>
+                                <div>
+                    <h4>Returns</h4>
+                    <table>
+                        <tr>
+                            <td>Function</td>
+                            <td> a JSGI middleware function</td>
+                        </tr>
+                    </table>
+                </div>
+                </div>
+            </div>
+    
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        <!-- <div class="jsdocSidenav">
+   <div class="toggles">
+      <a href="../../">&bull; Modules</a>
+      <a href="../../index_all.html">&bull; Overview</a>
+   </div>
+
+   <input id="filter" type="text" placeholder="Filter modules" />
+
+   <ul id="modulelist">
+            <li><a href="../../stick/">stick</a></li>
+            <li><a href="../../helpers/">stick/helpers</a></li>
+            <li><a href="../../middleware/">stick/middleware</a></li>
+            <li><a href="../../middleware/basicauth/">stick/middleware/basicauth</a></li>
+            <li><a href="../../middleware/continuation/">stick/middleware/continuation</a></li>
+            <li><a href="../../middleware/cookies/">stick/middleware/cookies</a></li>
+            <li><a href="../../middleware/error/">stick/middleware/error</a></li>
+            <li><a href="../../middleware/etag/">stick/middleware/etag</a></li>
+            <li><a href="../../middleware/gzip/">stick/middleware/gzip</a></li>
+            <li><a href="../../middleware/method/">stick/middleware/method</a></li>
+            <li><a href="../../middleware/mount/">stick/middleware/mount</a></li>
+            <li><a href="../../middleware/notfound/">stick/middleware/notfound</a></li>
+            <li><a href="../../middleware/params/">stick/middleware/params</a></li>
+            <li><a href="../../middleware/profiler/">stick/middleware/profiler</a></li>
+            <li><a href="../../middleware/render/">stick/middleware/render</a></li>
+            <li><a href="../../middleware/requestlog/">stick/middleware/requestlog</a></li>
+            <li><a href="../../middleware/route/">stick/middleware/route</a></li>
+            <li><a href="../../middleware/session/">stick/middleware/session</a></li>
+            <li><a href="../../middleware/static/">stick/middleware/static</a></li>
+            <li><a href="../../middleware/upload/">stick/middleware/upload</a></li>
+      </ul>
+</div>
+ -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="http://localhost/virtuejs//reinhardt/templates.html">Syntax overview</a></li>
+        <li><a href="http://localhost/virtuejs//reinhardt/filters.html">Filter reference</a></li>
+        <li><a href="http://localhost/virtuejs//reinhardt/tags.html">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="http://localhost/virtuejs//sqlstore/Basics.html">Connecting to the database</a></li>
+        <li><a href="http://localhost/virtuejs//sqlstore/Mapping.html">Model mapping</a></li>
+        <li><a href="http://localhost/virtuejs//sqlstore/Query.html">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="http://localhost/virtuejs//stick/route.html">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="http://localhost/virtuejs//deployment.html">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+</body>
+</html>

@@ -40,13 +40,15 @@
 
 <p>Jetty is itself a powerful webserver, so you can use the same setup you would use in development.</p>
 
+<h2>Apache</h2>
+
 <p>If you feel more comfortable with Apache, we suggest the following setup:</p>
 
 
 <ol><li>Your Ringo app should run on a port not accessible from outside</li>
 <li>Proxy the requests to your application using mod_proxy</li></ol>
 
-<p>A simple apache configuration, which would forward requests below <code>example.com/ringo-app/</code> to a Ringo application running on port <code>:8080</code> would look like the following:</p>
+<p>A simple apache configuration, which would forward requests below <code>example.com/ringo-app/</code> to a Ringo application running on port <code>:8080</code> would look like this:</p>
 
 <pre class="sh_javascript"><code>&lt;VirtualHost *:80&gt;
     ServerName example.com
@@ -55,12 +57,16 @@
     ProxyPass /ringo-app/     http://localhost:8080/
 &lt;/VirutalHost&gt;</code></pre>
 
+<h2>Hosted Services</h2>
+
+<p>Ringo's <a href="http://ringojs.org/documentation/deployment">deployment help page</a> has the details an how to get your application on Google App Engine, OpenShift or Heroku.</p>
+
 
     </div>
 
     <div class="submenu">
       <div class="wrapper">
-        
+        <!--  -->
       </div>
     </div>
 
