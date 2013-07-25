@@ -1,7 +1,9 @@
-Old-school server-side JavaScript.
+VirtueJs is a loosely coupled web application framework on top of [RingoJs](http://ringojs.org). It pulls together the best of breed Ringo packages to provide templating, a view engine and an ORM.
 
+If you are a Java developer and want to give a dynamic language a shot, Virtue is your best choice.
 
 Example view code:
+
 
 		app.get('/helloworld', function() {
 		   return templates.renderResponse('users.html', {
@@ -9,7 +11,7 @@ Example view code:
 		   });
 		});
 
-Example template:
+A simple template example:
 
 
     {% extends 'base.html' %}
@@ -22,7 +24,8 @@ Example template:
       </ul>
     {% endblock %}
 
-Example ORM definition:
+Defining database models:
+
 
 	var User = db.defineEntity('User', {
 	   properties: {
@@ -35,8 +38,8 @@ Example ORM definition:
 	   }
 	});
 
-	var user = new User({firstname: 'django', likesCats: false, location: locationObject});
-	user.save();
+Talking to Java:
 
+	var hashMap = new java.util.HashMap();
+	hashMap.put('foo', 'testing');
 
-Bla VirtueJs is awesome and bla bla.
