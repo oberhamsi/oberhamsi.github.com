@@ -1,0 +1,6 @@
+[submodule "site/_external/reinhardt"]
+	path = site/_external/reinhardt
+	url = https://github.com/oberhamsi/reinhardt.git
+[submodule "site/_external/sqlstore"]
+	path = site/_external/sqlstore
+	url = https://github.com/grob/ringo-sqlstore.wiki.git
