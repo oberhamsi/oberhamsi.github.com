@@ -1,1 +1,7 @@
 k
+[submodule "external/reinhardt"]
+	path = external/reinhardt
+	url = https://github.com/oberhamsi/reinhardt.git
+[submodule "external/sqlstore"]
+	path = external/sqlstore
+	url = https://github.com/grob/ringo-sqlstore.wiki.git
