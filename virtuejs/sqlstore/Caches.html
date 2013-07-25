@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h3>Entity cache</h3>
+
+<p>SQLstore features an entity cache to avoid issuing multiple SQL statements for the same objects. The object cache is an LRU (least recently used) cache which has a default size of 1000 objects. Every object retrieved, be it when resolving an object mapping, populating a collection or when manually querying using <code>query()</code>, is put into this cache.</p>
+
+<p>If using Ringo SQLstore in a multithreaded environment (which is the case for most RingoJS applications), all caches should be instantiated as singletons. After instantiation, the cache can be put into action by calling the store's <code>setEntityCache()</code> method:</p>
+
+<pre class="sh_javascript"><code>var {Store, ConnectionPool, Cache} = require("ringo-sqlstore");
+var entityCache = module.singleton("entityCache", function() {
+    // the argument defines the cache size
+    return new Cache(1000);
+});
+var connectionPool = module.singleton("connectionCache", function() {
+    return new ConnectionPool({
+        "url": "jdbc:h2:mem:test",
+        "driver": "org.h2.Driver"
+    });
+});
+var store = new Store(connectionPool);
+store.setEntityCache(entityCache);</code></pre>
+
+
+<h3>Query cache</h3>
+
+<p>Ringo SQLstore can use a second cache for performance gains - the query cache. If defined all queries, regardless whether specified in mapping definitions or in <code>store.query(…)</code> calls, are parsed only once and put into this cache. As with the entity cache, it should be instantiated as a singleton:</p>
+
+<pre class="sh_javascript"><code>var {Store, ConnectionPool, Cache} = require("ringo-sqlstore");
+var queryCache = module.singleton("queryCache", function() {
+    // the argument defines the cache size
+    return new Cache(1000);
+});
+var connectionPool = module.singleton("connectionCache", function() {
+    return new ConnectionPool({
+        "url": "jdbc:h2:mem:test",
+        "driver": "org.h2.Driver"
+    });
+});
+var store = new Store(connectionPool);
+store.setQueryCache(queryCache);</code></pre>
+
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

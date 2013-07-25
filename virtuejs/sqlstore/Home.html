@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h1>Ringo SQLstore</h1>
+
+<p>Ringo SQLstore is a lightweight ORM/storage implementation for <a href="/wiki/[RingoJS_|_http://ringojs.org/]" title="wiki link">[RingoJS | http://ringojs.org/]</a>. It uses JDBC for communication with databases. Current features are:</p>
+
+<ul><li>Creation of tables and sequences</li>
+<li>Transaction support</li>
+<li>Lazy loading</li>
+<li>One-to-one, one-to-many and many-to-many mappings</li>
+<li>Connection pooling</li>
+<li>Object caching</li>
+<li>Easy SQL-like querying</li></ul>
+
+<p>Currently supported databases are <a href="http://h2database.com">H2</a>, <a href="http://mysql.com">MySQL (5.x)</a>, <a href="http://www.oracle.com/technetwork/products/express-edition/overview/index.html">Oracle (XE)</a> and <a href="http://postgresql.org">PostgreSQL (8.x)</a>. H2 is part of the package, so you can start right off using it without the hassle of installing and configuring a database.</p>
+
+<h2>Status</h2>
+
+<p>Ringo SQLstore is experimental beta, so expect bugs and performance issues as well as significant API changes.</p>
+
+<h2>Documentation</h2>
+
+<ul><li><a href="/wiki/[Basics]" title="wiki link">[Basics]</a></li>
+<li><a href="/wiki/[Mapping_definition_|_Mapping]" title="wiki link">[Mapping definition | Mapping]</a></li>
+<li><a href="/wiki/[Queries_|_Query]" title="wiki link">[Queries | Query]</a></li>
+<li><a href="/wiki/[Transactions_|_Transactions]" title="wiki link">[Transactions | Transactions]</a></li>
+<li><a href="/wiki/[Object_and_query_caches_|_Caches]" title="wiki link">[Object and query caches | Caches]</a></li></ul>
+
+<h2>Acknowledgements</h2>
+
+<p>SQLstore is heavily inspired by</p>
+
+<ul><li><a href="/wiki/[ringo-hibernate_|_http://github.com/robi42/ringo-hibernate/]" title="wiki link">[ringo-hibernate | http://github.com/robi42/ringo-hibernate/]</a> by Robert Thurnher</li>
+<li><a href="/wiki/[Helma_|_http://helma.org]" title="wiki link">[Helma | http://helma.org]</a> (the predecessor of RingoJS)</li>
+<li><a href="/wiki/[Hibernate_|_http://hibernate.org]" title="wiki link">[Hibernate | http://hibernate.org]</a> Project</li></ul>
+
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

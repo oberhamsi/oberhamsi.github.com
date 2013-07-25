@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <p>VirtueJs is a loosely coupled web application framework on top of <a href="http://ringojs.org">RingoJs</a>. It pulls together the best of breed Ringo packages to provide templating, a view engine and an ORM.</p>
+
+<p>If you are a Java developer and want to give a dynamic language a shot, Virtue is your best choice.</p>
+
+<p>Example view code:</p>
+
+
+<pre class="sh_javascript"><code>    app.get('/helloworld', function() {
+       return templates.renderResponse('users.html', {
+          user: User.all()
+       });
+    });</code></pre>
+
+<p>A simple template example:</p>
+
+
+<pre class="sh_javascript"><code>{% extends 'base.html' %}
+{% block title %}Example Site{% endblock %}
+{% block content %}
+  &lt;ul&gt;
+  {% for user in users %}
+    &lt;li&gt;&lt;a href="{{ user.url }}"&gt;{{ user.username }}&lt;/a&gt;&lt;/li&gt;
+  {% endfor %}
+  &lt;/ul&gt;
+{% endblock %}</code></pre>
+
+<p>Defining database models:</p>
+
+
+<pre class="sh_javascript"><code>var User = db.defineEntity('User', {
+   properties: {
+      firstname: 'string',
+      likesCats: 'boolean',
+      location: {
+         type: 'object',
+         entity: 'Location'
+      }
+   }
+});</code></pre>
+
+<p>Talking to Java:</p>
+
+<pre class="sh_javascript"><code>var hashMap = new java.util.HashMap();
+hashMap.put('foo', 'testing');</code></pre>
+
+
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

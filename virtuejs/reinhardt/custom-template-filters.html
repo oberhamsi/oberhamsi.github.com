@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h1>Writing custom template filters</h1>
+
+<p>Custom filters are just functions that take one or two arguments:</p>
+
+<ul><li>The value of the variable (input) -- not necessarily a string.</li>
+<li>The value of the argument -- this can have a default value, or be left
+out altogether.</li></ul>
+
+<p>For example, in the filter <code>{{ var|foo:"bar" }}</code>, the filter <code>foo</code> would be
+passed the variable <code>var</code> and the argument <code>"bar"</code>.</p>
+
+<p>Filter functions should always return something. They shouldn't raise
+exceptions. They should fail silently. In case of error, they should return
+either the original input or an empty string -- whichever makes more sense.</p>
+
+<p>Here's an example filter definition:</p>
+
+<pre class="sh_javascript"><code>// Removes all values of arg from the given string
+exports.cut = function(value, arg) {
+    return value.replace(arg, '');
+}</code></pre>
+
+<p>And here's an example of how that filter would be used:</p>
+
+<pre class="sh_javascript"><code>{{ somevariable|cut:"0" }}</code></pre>
+
+<p>Most filters don't take arguments. In this case, just leave the argument out of
+your function. Example:</p>
+
+
+<pre class="sh_javascript"><code>// Only one argument.
+// Converts a string into all lowercase
+exports.lower = function(value) {
+    return value.lower()
+};</code></pre>
+
+<h2>Filters and auto-escaping</h2>
+
+<p>When writing a custom filter, give some thought to how the filter will interact
+with Reinhardt's auto-escaping behavior. Note that three types of strings can be
+passed around inside the template code:</p>
+
+<ul><li><p><strong>Raw strings</strong> are the native String types. On output, they're escaped if
+auto-escaping is in effect and presented unchanged, otherwise.</p></li>
+
+<li><p><strong>Safe strings</strong> are strings that have been marked safe from further
+escaping at output time. Any necessary escaping has already been done. They're
+commonly used for output that contains raw HTML that is intended   to be
+interpreted as-is on the client side. Internally, these strings are instances
+of <code>String</code> with the property <code>isSafe=true</code> attached. You can test for them
+using code like:</p>
+
+<p>var {isSafe} = require('reinhardt/utils');
+isSafe(fooString)</p></li>
+
+
+<li><p><strong>Strings marked as "needing escaping"</strong> are <em>always</em> escaped on output,
+regardless of whether they are in an <code>autoescape</code> block or   not. These
+strings are only escaped once, however, even if auto-escaping applies.
+Internally, these strings are also instances of <code>String</code> with the property
+<code>doEscape=true</code> attached. Generally you don't have to worry about these; they
+exist for the implementation of the <code>escape</code> filter.</p></li></ul>
+
+<p>Template filter code falls into one of two situations:</p>
+
+<ol><li>Introduces no HTML-unsafe characters</li></ol>
+<hr />
+
+<p>Your filter does not introduce any HTML-unsafe characters (<code>&lt;</code>, <code>&gt;</code>,
+<code>'</code>, <code>"</code> or <code>&amp;</code>) into the result that were not already present. In
+this case, you can let Reinhardt take care of all the auto-escaping
+handling for you. All you need to do is set the <code>isSafe</code> flag to <code>True</code>
+at your filter function, like so:</p>
+
+
+<pre class="sh_javascript"><code>   exports.myFilter = function() {...}
+   exports.myFilter.isSafe = true;</code></pre>
+
+<p>The <code>isSafe</code> flag tells Reinhardt that if a "safe" string is passed into your
+filter, the result will still be "safe" and if a non-safe string is    passed
+in, Reinhardt will automatically escape it, if necessary.</p>
+
+<p>You can think of this as meaning "this filter is safe -- it doesn't
+introduce any possibility of unsafe HTML."</p>
+
+<p>The reason <code>isSafe</code> is necessary is because there are plenty of    normal
+string operations that will turn a safe String object back into    a normal
+String object and, rather than try to catch    them all, which would be very
+difficult, Reinhardt repairs the damage after    the filter has completed.</p>
+
+<p>For example, suppose you have a filter that adds the string <code>xx</code> to    the
+end of any input. Since this introduces no dangerous HTML characters    to the
+result (aside from any that were already present), you should    mark your
+filter with <code>isSafe</code>:</p>
+
+
+<pre class="sh_javascript"><code>   exports.add_xx = function(value) {
+       return value + 'xx';
+   };
+   exports.add_xx.isSafe = true;</code></pre>
+
+<p>When this filter is used in a template where auto-escaping is enabled,
+Reinhardt will escape the output whenever the input is not already marked
+as "safe".</p>
+
+<p>By default, <code>isSafe</code> is <code>false</code>, and you can omit it from any filters
+where it isn't required.</p>
+
+<p>Be careful when deciding if your filter really does leave safe strings    as
+safe. If you're <em>removing</em> characters, you might inadvertently leave
+unbalanced HTML tags or entities in the result. For example, removing a
+<code>&gt;</code> from the input might turn <code>&lt;a&gt;</code> into <code>&lt;a</code>, which would need to    be
+escaped on output to avoid causing problems. Similarly, removing a
+semicolon (<code>;</code>) can turn <code>&amp;amp;</code> into <code>&amp;amp</code>, which is no longer a
+valid entity and thus needs further escaping. Most cases won't be nearly
+this tricky, but keep an eye out for any problems like that when    reviewing
+your code.</p>
+
+<p>Marking a filter <code>isSafe</code> will coerce the filter's return value to    a
+string.  If your filter should return a boolean or other non-string    value,
+marking it <code>isSafe</code> will probably have unintended    consequences (such as
+converting a boolean false to the string    'false').</p>
+
+<ol><li>Introduces new HTML markup</li></ol>
+<hr />
+
+<p>Alternatively, your filter code can manually take care of any necessary
+escaping. This is necessary when you're introducing new HTML markup into
+the result. You want to mark the output as safe from further    escaping so
+that your HTML markup isn't escaped further, so you'll need    to handle the
+input yourself.</p>
+
+<p>To mark the output as a safe string, use <code>reinhardt.utils.markSafe()</code>.</p>
+
+<p>Be careful, though. You need to do more than just mark the output as    safe.
+You need to ensure it really <em>is</em> safe, and what you do depends on    whether
+auto-escaping is in effect. The idea is to write filters than    can operate
+in templates where auto-escaping is either on or off in    order to make
+things easier for your template authors.</p>
+
+<p>In order for your filter to know the current auto-escaping state, set the
+<code>needsAutoescape</code> flag to <code>true</code> when you write your filter function.
+(If you don't specify this flag, it defaults to <code>false</code>). This flag tells
+Reinhardt that your filter function wants to be passed an extra    argument,
+called <code>autoescape</code>, that is <code>true</code> if auto-escaping is in    effect and
+<code>false</code> otherwise.</p>
+
+<p>For example, let's write a filter that emphasizes the first character of    a
+string:</p>
+
+
+<pre class="sh_javascript"><code>  var {markSafe} = require('reinhardt/utils');
+  var {escape, conditionalEscape} = require('reinhardt/utils/html');
+  exports.initialLetter = function(text, autoescape) {
+    var first = text.substring(0,1);
+    var other = test.substring(1);
+    var escFn;
+    if (autoescape === true) {
+      escFn = conditionalEscape;
+    } else {
+      escFn = function(x) { return x};
+    }
+    var result = "&lt;strong&gt;" + escFn(first) + "&lt;/strong&gt;";
+    return markSafe(result);
+  }
+  exports.initialLetter.needsAutoescape = true;</code></pre>
+
+<p>The <code>needsAutoescape</code> flag and the <code>autoescape</code> argument mean that our
+function will know whether automatic escaping is in effect when the filter
+is called. We use <code>autoescape</code> to decide whether the input data needs to
+be passed through <code>reinhardt.utils.html.conditionalEscape</code> or not. (In
+the latter case, we just use the identity function as the "escape"
+function.) The <code>conditionalEscape()</code> function is like <code>escape()</code> except
+it only escapes input that is <strong>not</strong> a safe String instance. If a safe
+String is passed to <code>conditional_escape()</code>, the data is returned
+unchanged.</p>
+
+<p>Finally, in the above example, we remember to mark the result as safe    so
+that our HTML is inserted directly into the template without further
+escaping.</p>
+
+<p>There's no need to worry about the <code>isSafe</code> flag in this case    (although
+including it wouldn't hurt anything). Whenever you manually    handle the
+auto-escaping issues and return a safe string, the    <code>isSafe</code> flag won't
+change anything either way.</p>
+
+
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

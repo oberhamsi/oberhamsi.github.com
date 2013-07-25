@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h1>Requirements</h1>
+
+<p>Depending on the database you want to use you need to place the driver .jar file into the "jars" subdirectory of ringo-sqlstore.</p>
+
+<p><strong>Important:</strong> sqlstore expects driver files named "mysql.jar", "oracle.jar" resp. "postgresql.jar".</p>
+
+<h1>Basics</h1>
+
+<p>Setting up Ringo SQLstore is done in a few lines of code. Require the module, create an instance of ConnectionPool with the connection parameters as argument and pass it to the Store constructor:</p>
+
+<pre class="sh_javascript"><code>var {ConnectionPool, Store} = require("ringo-sqlstore");
+var connectionPool = module.singleton("connectionPool", function() {
+    return new ConnectionPool({
+        "url": "jdbc:h2:mem:test",
+        "driver": "org.h2.Driver"
+    });
+});
+var store = new Store(connectionPool);</code></pre>
+
+<p>The above example would operate on a H2 in-memory database, which is created when the first connection to the database is opened. An example for an existing MySQL database "test" would look like this:</p>
+
+<pre class="sh_javascript"><code>var connectionPool = module.singleton("connectionPool", function() {
+    return new ConnectionPool({
+        "url": "jdbc:mysql://localhost/test",
+        "driver": "com.mysql.jdbc.Driver",
+        "username": "test",
+        "password": "test"
+    });
+});
+var store = new Store(connectionPool);</code></pre>
+
+<p>Within one application you can instantiate as many stores as needed, each operating on it's own database. Once the store is set up correctly, you should continue <a href="Mapping">defining entities</a> managed by this store instance.</p>
+
+<h2>Why using a singleton for ConnectionPool?</h2>
+
+<p>The above examples instantiate the connection pool as a singleton, meaning it will be created only once, regardless how many threads an application uses. This is important: if Ringo SQLstore is used in a multithreaded application, it is viable to use a singleton for the connection pool, otherwise every new thread started in the application would create its own pool, and basically render the connection pool useless.</p>
+
+<p>The same applies to the two caches SQLstore can utilize. Read more about them in the <a href="Caches">caches section</a></p>
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

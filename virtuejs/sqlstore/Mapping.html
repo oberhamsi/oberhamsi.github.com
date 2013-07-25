@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h1>Defining entitites</h1>
+
+<p>As with all RingoJS storage implementation entities are defined by calling the store's method <code>defineEntity()</code>, passing the name of the entity as first argument. In addition SQLstore requires an object containing the mapping definition as second argument. The purpose of this object is to define the type of each property and in which column the property is stored in. To start right away, in it's simplest form a mapping definition looks like this:</p>
+
+<pre class="sh_javascript"><code>var Author = store.defineEntity("Author", {
+    "properties": {
+        "name": "string"
+    }
+});</code></pre>
+
+<h2>Table Name Definition</h2>
+
+<p>Note that the above definition doesn't specify a table, the ID column or the column the "name" property is stored in, so relying on defaults provided by SQLstore.</p>
+
+<p>If no table name is defined, SQLstore will create a table with the same name and capitalization as the entity defined. The above example would therefor create a table "Author" in your database. You can override this by adding a property "table" to the mapping definition:</p>
+
+<pre class="sh_javascript"><code>var Author = store.defineEntity("Author", {
+    "table": "t_author",
+    "properties": {
+        "name": "string"
+    }
+});</code></pre>
+
+<h2>ID Definition</h2>
+
+<p>Our example lacks a definition for the unique ID too, so SQLstore will create a column named "id" in this table. Again this can be overridden:</p>
+
+<pre class="sh_javascript"><code>var Author = store.defineEntity("Author", {
+    "table": "t_author",
+    "id": {
+        "column": "author_id"
+    },
+    "properties": {
+        "name": "string"
+    }
+});</code></pre>
+
+<p>Note that the ID is not part of the "properties" definition. IDs are handled differently than normal properties, and entity instances won't contain an "id" property, instead the ID is stored in a special read only property "_id". For newly created entity instances this property is <code>undefined</code> until the instance is persisted.</p>
+
+<p>Entity instances contain a second special property named <code>_key</code>, containing the internal instance key. The string representation of this key looks like "Author#null" for transient Author instances, or "Author#123" for persistent ones. Normally you won't need to access the key of an instance.</p>
+
+<h3>ID Sequences</h3>
+
+<p>Back to the ID definition. To generate an ID when persisting an instance SQLstore would normally issue a select statement like <code>SELECT MAX("id") FROM "Author"</code>, increment it by one and use this as the ID for the newly persisted object. But some databases support ID sequences for generating unique identifiers, which you can add to the ID definition like this:</p>
+
+<pre class="sh_javascript"><code>var Author = store.defineEntity("Author", {
+    "table": "t_author",
+    "id": {
+        "column": "author_id",
+        "sequence": "seq_author_id"
+    },
+    "properties": {
+        "name": "string"
+    }
+});</code></pre>
+
+<p>If a sequence has been specified, SQLstore will query it for a unique ID and use the result as identifier for a newly persisted entity instance.</p>
+
+<h2>Properties</h2>
+
+<p>Our example entity mapping definition contains the simplest way of defining properties: specify the name of the property and it's type. The following types are supported by SQLstore:</p>
+
+<ul><li>integer</li>
+<li>long</li>
+<li>short</li>
+<li>float</li>
+<li>double</li>
+<li>character</li>
+<li>string</li>
+<li>byte</li>
+<li>boolean</li>
+<li>date</li>
+<li>time</li>
+<li>timestamp</li>
+<li>binary</li>
+<li>text</li></ul>
+
+<p>Depending on the numeric or string type of a property and the underlying database SQLstore will create a column capable to store the value of a property. For integer and string types you can in addition specify the maximum size of the column. Double and float types additionally accept precision and scale parameters. A special case is the <code>boolean</code> type, as some databases don't natively support a boolean datatype. In this case SQLstore uses a single digit column to store the value <code>0</code> for false and <code>1</code> for true.</p>
+
+<p>To add additional definitions to a property mapping replace the type value in the example above with an object literal. We'll add a maximum length to the name property and specify the name of the column in which it will be stored:</p>
+
+<pre class="sh_javascript"><code>var Author = store.defineEntity("Author", {
+    "table": "t_author",
+    "id": {
+        "column": "author_id",
+        "sequence": "seq_author_id"
+    },
+    "properties": {
+        "name": {
+            "column": "author_name",
+            "type": "string",
+            "length": 200
+        }
+    }
+});</code></pre>
+
+<p>By default properties accept null values. If you want to prohibit storing null values in a column add a property <code>nullable</code> with the value <code>false</code> to the property definition:</p>
+
+<pre class="sh_javascript"><code>"name": {
+    "column": "author_name",
+    "type": "string",
+    "length": 200,
+    "nullable": false
+}</code></pre>
+
+<p>As mentioned above, <code>float</code> and <code>double</code> types additionally accept the properties <code>precision</code> and <code>scale</code>.</p>
+
+<h2>One-To-One Mappings</h2>
+
+<p>Besides properties entity mappings can contain any number of one-to-one mappings (aka "object mappings"). For each of these mappings you need to at least define the mapped entity type. So the minimal version of a one-to-one mapping looks like this:</p>
+
+<pre class="sh_javascript"><code>var Book = store.defineEntity("Book", {
+    "properties": {
+        "author": {
+            "type": "object",
+            "entity": "Author"
+        }
+    }
+});</code></pre>
+
+<p>Again, when creating the table for the above "Book" entity SQLstore would create a column "author" to store the ID of the author of a Book instance. As with normal properties, this can be overridden:</p>
+
+<pre class="sh_javascript"><code>var Book = store.defineEntity("Book", {
+    "properties": {
+        "author": {
+            "type": "object",
+            "entity": "Author",
+            "column": "book_f_author"
+        }
+    }
+});</code></pre>
+
+<p>For those rare cases where the object mapping uses a different identifier than the ID of the mapped entity, you can also specify the property whose value should be stored in the book's column <code>book_f_author</code> by adding the property containing the desired key column in a <code>foreignProperty</code> property:</p>
+
+<pre class="sh_javascript"><code>var Book = store.defineEntity("Book", {
+    "properties": {
+        "author": {
+            "type": "object",
+            "entity": "Author",
+            "column": "book_f_author",
+            "foreignProperty": "author_ssn"
+        }
+    }
+});</code></pre>
+
+<p>Note that one-to-one mappings are always loaded lazily, so when retrieving a Book instance the author property would contain only an Author instance without any data (besides it's ID). The values of the author would be retrieved using a second SQL query when you access a property of it for the first time.</p>
+
+<h2>One-To-Many Relations</h2>
+
+<p>SQLstore also supports one-to-many relations (aka "collections"). A collection definition consists of two properties: <code>type</code> (which is always <code>collection</code>) and <code>query</code>:</p>
+
+<pre class="sh_javascript"><code>var Author = store.defineEntity("Author", {
+    "properties": {
+        "name": "string",
+        "books": {
+            "type": "collection",
+            "query": "from Book where Book.id = :id"
+        }
+    }
+});</code></pre>
+
+<p>When constructing the collection the query will be translated to SQL and used to retrieve the IDs of the Objects contained in the collection (<a href="Query">more about queries in Ringo SQLstore</a>).</p>
+
+<p>Note the <code>:id</code> in the query: this is a "named parameter", and by default you can reference all properties of the instance containing the collection this way.</p>
+
+<p>A "collection" nearly behaves like a normal Javascript array. The major difference is that you can't access an object in a collection using the index position notation <code>collection[idx]</code>. Instead you need to call a collection's method <code>get(idx)</code> to retrieve an object at a given index position. But collections have a <code>length</code> property and you can iterate over it using either <code>forEach</code>, <code>for each</code> or <code>for (var idx = 0; idx &lt; collection.length; i += 1)</code>. You can also use all the other iteration methods like <code>map</code>, <code>filter</code>, <code>some</code> etc.</p>
+
+<p><strong>Collections are effecively read-only</strong>, but can be rebuild at any time by calling <code>invalidate()</code>. The effect of this is that the ID index of a collection is removed from the store's cache, and rebuilt at next access.</p>
+
+<p>When working with transactions it's best to invalidate collections once it's sure that all changes have been successfully stored in the database, so after calling <code>commitTransaction()</code> on the store instance (or by calling <code>commit()</code> on the transaction instance itself):</p>
+
+<pre class="sh_javascript"><code>// open a new transaction
+store.beginTransaction();
+try {
+    // create new book instances and save them
+    (new Book({…})).save();
+    (new Book({…})).save();
+    // commit the transaction
+    store.commitTransaction();
+    // invalidate the author's books collection
+    author.books.invalidate();
+} catch (e) {
+    store.abortTransaction();
+}</code></pre>
+
+
+<h2>Many-To-Many Relations</h2>
+
+<p>In addition to one-to-many collections SQLstore also supports many-to-many mappings. To use these SQLstore expects a relation entity to be defined in the model:</p>
+
+<pre class="sh_javascript"><code>store.defineEntity("RelAuthorBook", {
+    "table": "t_relation",
+    "author": {
+        "type": "object",
+        "entity": "Author"
+        "column": "rel_author"
+    },
+    "book": {
+        "type": "object",
+        "entity": "Book",
+        "column": "rel_book"
+    }
+});</code></pre>
+
+<p>So basically this relation entity consists of two properties "author" and "book", which in our example are one-to-one mappings. Note that SQLstore will add an additional "id" column if you don't specify one since it currently doesn't support combined keys. With this relation entity in place it's easy to create a many-to-many collection using a join query:</p>
+
+<pre class="sh_javascript"><code>"books": {
+    "type": "collection",
+    "query": "from Book b join RelAuthorBook r on b.id = r.book where r.author = :id"
+}</code></pre>
+
+
+<h2>Aggressive Collection Loading</h2>
+
+<p>By default collections are loaded lazily, which means SQLstore will retrieve the list of entity IDs when first accessing a collection property or method, and load the entities themselves one by one when a property of them is accessed. Depending on the collection size this can lead to a massive amount of SQL statements (imagine iterating over a huge collection), therefor you can define eager or <em>aggressive</em> loading of collections by using a different query:</p>
+
+<pre class="sh_javascript"><code>"books": {
+    "type": "collection",
+    "query": "select Book.* from Book where Book.author = :id"
+}</code></pre>
+
+<h2>Partitioned Collections</h2>
+
+<p>SQLstore supports another collection optimization: partitioned collections. When a partitioned collection is first accessed, SQLstore retrieves the list of entity IDs depending on the collection filtering and creates partitions with a default size of 100 (this can be overridden). When accessing an object within this collection, SQLstore aggressively loads the partition in which the object resides using a single SQL statement and creates the entities in this partition. Partitioned collections can improve performance for big collections, however keep in mind that most databases have a maximum allowed size of <code>where [id column] in ([list of IDs]])</code> clauses, so a single partition should not be bigger than that.</p>
+
+<pre class="sh_javascript"><code>"books": {
+    "type": "collection",
+    "query": "from Book where Book.author = :id",
+    "isPartitioned": true,
+    "partitionSize": 200
+}</code></pre>
+
+
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

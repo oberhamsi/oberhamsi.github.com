@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h1>Built-in template tags</h1>
+
+<p>This document describes Reinhardt's built-in template tags.</p>
+
+<p><strong>List of built in tags</strong></p>
+
+<ul><li><a href="#autoescape">autoescape</a></li>
+<li><a href="#block">block</a></li>
+<li><a href="#comment">comment</a></li>
+<li><a href="#cycle">cycle</a></li>
+<li><a href="#extends">extends</a></li>
+<li><a href="#filter">filter</a></li>
+<li><a href="#firstof">firstof</a></li>
+<li><a href="#for">for</a></li>
+<li><a href="#for--empty">for ... empty</a></li>
+<li><a href="#if">if</a></li>
+<li><a href="#ifchanged">ifchanged</a></li>
+<li><a href="#ifequal">ifequal</a></li>
+<li><a href="#ifnotequal">ifnotequal</a></li>
+<li><a href="#include">include</a></li>
+<li><a href="#loadtag--loadfilter">loadtag / loadfilter</a></li>
+<li><a href="#spaceless">spaceless</a></li>
+<li><a href="#verbatim">verbatim</a></li>
+<li><a href="#widthratio">widthratio</a></li>
+<li><a href="#with">with</a></li></ul>
+
+<h2>autoescape</h2>
+
+<p>Controls the current auto-escaping behavior. This tag takes either <code>on</code> or
+<code>off</code> as an argument and that determines whether auto-escaping is in effect
+inside the block. The block is closed with an <code>endautoescape</code> ending tag.</p>
+
+<p>When auto-escaping is in effect, all variable content has HTML escaping applied
+to it before placing the result into the output (but after any filters have
+been applied). This is equivalent to manually applying the <code>escape</code>
+filter to each variable.</p>
+
+<p>The only exceptions are variables that are already marked as "safe" from
+escaping, either by the code that populated the variable, or because it has had
+the <code>safe</code> or <code>escape</code> filters applied.</p>
+
+<p>Sample usage:</p>
+
+<pre class="sh_javascript"><code>{% autoescape on %}
+    {{ body }}
+{% endautoescape %}</code></pre>
+
+<h2>block</h2>
+
+<p>Defines a block that can be overridden by child templates. See
+the section "Template inheritance" in the <a href="templates.md">general template help</a> for more information.</p>
+
+<h2>comment</h2>
+
+<p>Ignores everything between <code>{% comment %}</code> and <code>{% endcomment %}</code>.</p>
+
+<p>Sample usage:</p>
+
+<pre class="sh_javascript"><code>&lt;p&gt;Rendered text with {{ pub_date|date:"c" }}&lt;/p&gt;
+{% comment %}
+    &lt;p&gt;Commented out text with {{ create_date|date:"c" }}&lt;/p&gt;
+{% endcomment %}</code></pre>
+
+
+<h2>cycle</h2>
+
+<p>Cycles among the given strings or variables each time this tag is encountered.</p>
+
+<p>Within a loop, cycles among the given strings each time through the
+loop:</p>
+
+<pre class="sh_javascript"><code>{% for o in some_list %}
+    &lt;tr class="{% cycle 'row1' 'row2' %}"&gt;
+        ...
+    &lt;/tr&gt;
+{% endfor %}</code></pre>
+
+<p>You can use variables, too. For example, if you have two template variables,
+<code>rowvalue1</code> and <code>rowvalue2</code>, you can cycle between their values like this:</p>
+
+<pre class="sh_javascript"><code>{% for o in some_list %}
+    &lt;tr class="{% cycle rowvalue1 rowvalue2 %}"&gt;
+        ...
+    &lt;/tr&gt;
+{% endfor %}</code></pre>
+
+<p>Note that variable arguments (<code>rowvalue1</code> and <code>rowvalue2</code> above) are
+auto-escaped!</p>
+
+<p>You can mix variables and strings:</p>
+
+<pre class="sh_javascript"><code>{% for o in some_list %}
+    &lt;tr class="{% cycle 'row1' rowvalue2 'row3' %}"&gt;
+        ...
+    &lt;/tr&gt;
+{% endfor %}</code></pre>
+
+<p>In some cases you might want to refer to the next value of a cycle from
+outside of a loop. To do this, just give the <code>{% cycle %}</code> tag a name, using
+"as", like this:</p>
+
+<pre class="sh_javascript"><code>{% cycle 'row1' 'row2' as rowcolors %}</code></pre>
+
+<p>From then on, you can insert the current value of the cycle wherever
+you'd like in your template by referencing the cycle name as a context
+variable. If you want to move the cycle onto the next value, you use
+the cycle tag again, using the name of the variable. So, the following
+template:</p>
+
+<pre class="sh_javascript"><code>&lt;tr&gt;
+    &lt;td class="{% cycle 'row1' 'row2' as rowcolors %}"&gt;...&lt;/td&gt;
+    &lt;td class="{{ rowcolors }}"&gt;...&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td class="{% cycle rowcolors %}"&gt;...&lt;/td&gt;
+    &lt;td class="{{ rowcolors }}"&gt;...&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+
+<p>would output:</p>
+
+<pre class="sh_javascript"><code>&lt;tr&gt;
+    &lt;td class="row1"&gt;...&lt;/td&gt;
+    &lt;td class="row1"&gt;...&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td class="row2"&gt;...&lt;/td&gt;
+    &lt;td class="row2"&gt;...&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+
+<p>You can use any number of values in a <code>{% cycle %}</code> tag, separated by spaces.
+Values enclosed in single (<code>'</code>) or double quotes (<code>"</code>) are treated as
+string literals, while values without quotes are treated as template variables.</p>
+
+<p>Note that currently the variables included in the cycle will not be escaped.
+Any HTML or Javascript code contained in the printed variable will be rendered
+as-is, which could potentially lead to security issues.</p>
+
+<p>By default, when you use the <code>as</code> keyword with the cycle tag, the
+usage of <code>{% cycle %}</code> that declares the cycle will itself output
+the first value in the cycle. This could be a problem if you want to
+use the value in a nested loop or an included template. If you want to
+just declare the cycle, but not output the first value, you can add a
+<code>silent</code> keyword as the last keyword in the tag. For example:</p>
+
+<pre class="sh_javascript"><code>{% for obj in some_list %}
+    {% cycle 'row1' 'row2' as rowcolors silent %}
+    &lt;tr class="{{ rowcolors }}"&gt;{% include "subtemplate.html" %}&lt;/tr&gt;
+{% endfor %}</code></pre>
+
+<p>This will output a list of <code>&lt;tr&gt;</code> elements with <code>class</code>
+alternating between <code>row1</code> and <code>row2</code>; the subtemplate will have
+access to <code>rowcolors</code> in its context that matches the class of the
+<code>&lt;tr&gt;</code> that encloses it. If the <code>silent</code> keyword were to be
+omitted, <code>row1</code> would be emitted as normal text, outside the
+<code>&lt;tr&gt;</code> element.</p>
+
+<p>When the silent keyword is used on a cycle definition, the silence
+automatically applies to all subsequent uses of the cycle tag. In,
+the following template would output <em>nothing</em>, even though the second
+call to <code>{% cycle %}</code> doesn't specify silent:</p>
+
+<pre class="sh_javascript"><code>{% cycle 'row1' 'row2' as rowcolors silent %}
+{% cycle rowcolors %}</code></pre>
+
+
+<h2>extends</h2>
+
+<p>Signals that this template extends a parent template.</p>
+
+<p>This tag can be used in two ways:</p>
+
+<ul><li><p><code>{% extends "base.html" %}</code> (with quotes) uses the literal value
+<code>"base.html"</code> as the name of the parent template to extend.</p></li>
+
+<li><p><code>{% extends variable %}</code> uses the value of <code>variable</code>. If the variable
+evaluates to a string, Django will use that string as the name of the
+parent template. If the variable evaluates to a <code>Template</code> object,
+Django will use that object as the parent template.</p></li></ul>
+
+<p>See <a href="/wiki/template-inheritance" title="wiki link">template-inheritance</a> for more information.</p>
+
+
+
+<h2>filter</h2>
+
+<p>Filters the contents of the variable through variable filters.</p>
+
+<p>Filters can also be piped through each other, and they can have arguments --
+just like in variable syntax.</p>
+
+<p>Sample usage:</p>
+
+<pre class="sh_javascript"><code>{% filter force_escape|lower %}
+    This text will be HTML-escaped, and will appear in all lowercase.
+{% endfilter %}</code></pre>
+
+<p>.. note:</p>
+
+<pre class="sh_javascript"><code>The `escape` and `safe` filters are not acceptable
+arguments. Instead, use the `autoescape` tag to manage autoescaping
+for blocks of template code.</code></pre>
+
+
+
+<h2>firstof</h2>
+
+<p>Outputs the first variable passed that is not False. Does NOT auto-escape
+variable values.</p>
+
+<p>Outputs nothing if all the passed variables are False.</p>
+
+<p>Sample usage:</p>
+
+<pre class="sh_javascript"><code>{% firstof var1 var2 var3 %}</code></pre>
+
+<p>This is equivalent to:</p>
+
+<pre class="sh_javascript"><code>{% if var1 %}
+    {{ var1|safe }}
+{% elif var2 %}
+    {{ var2|safe }}
+{% elif var3 %}
+    {{ var3|safe }}
+{% endif %}</code></pre>
+
+<p>You can also use a literal string as a fallback value in case all
+passed variables are False:</p>
+
+<pre class="sh_javascript"><code>{% firstof var1 var2 var3 "fallback value" %}</code></pre>
+
+<h2>for</h2>
+
+<p>Loop over each item in an array.  For example, to display a list of athletes
+provided in <code>athlete_list</code>:</p>
+
+<pre class="sh_javascript"><code>&lt;ul&gt;
+{% for athlete in athlete_list %}
+    &lt;li&gt;{{ athlete.name }}&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre>
+
+<p>You can loop over a list in reverse by using
+<code>{% for obj in list reversed %}</code>.</p>
+
+<p>If you need to loop over a list of lists, you can unpack the values
+in each sub-list into individual variables. For example, if your context
+contains a list of (x,y) coordinates called <code>points</code>, you could use the
+following to output the list of points:</p>
+
+<pre class="sh_javascript"><code>{% for x, y in points %}
+    There is a point at {{ x }},{{ y }}
+{% endfor %}</code></pre>
+
+<p>The for loop sets a number of variables available within the loop:</p>
+
+<pre class="sh_javascript"><code>==========================  ===============================================
+Variable                    Description
+==========================  ===============================================
+``forloop.counter``         The current iteration of the loop (1-indexed)
+``forloop.counter0``        The current iteration of the loop (0-indexed)
+``forloop.revcounter``      The number of iterations from the end of the
+                            loop (1-indexed)
+``forloop.revcounter0``     The number of iterations from the end of the
+                            loop (0-indexed)
+``forloop.first``           True if this is the first time through the loop
+``forloop.last``            True if this is the last time through the loop
+``forloop.parentloop``      For nested loops, this is the loop "above" the
+                            current one
+==========================  ===============================================</code></pre>
+
+<h2>for ... empty</h2>
+
+<p>The <code>for</code> tag can take an optional <code>{% empty %}</code> clause that will be
+displayed if the given array is empty or could not be found:</p>
+
+<pre class="sh_javascript"><code>&lt;ul&gt;
+{% for athlete in athlete_list %}
+    &lt;li&gt;{{ athlete.name }}&lt;/li&gt;
+{% empty %}
+    &lt;li&gt;Sorry, no athletes in this list.&lt;/li&gt;
+{% endfor %}
+&lt;ul&gt;</code></pre>
+
+<p>The above is equivalent to -- but shorter, cleaner, and possibly faster
+than -- the following:</p>
+
+<pre class="sh_javascript"><code>&lt;ul&gt;
+  {% if athlete_list %}
+    {% for athlete in athlete_list %}
+      &lt;li&gt;{{ athlete.name }}&lt;/li&gt;
+    {% endfor %}
+  {% else %}
+    &lt;li&gt;Sorry, no athletes in this list.&lt;/li&gt;
+  {% endif %}
+&lt;/ul&gt;</code></pre>
+
+
+<h2>if</h2>
+
+<p>The <code>{% if %}</code> tag evaluates a variable, and if that variable is "true" (i.e.
+exists, is not empty, and is not a false boolean value) the contents of the
+block are output:</p>
+
+<pre class="sh_javascript"><code>{% if athlete_list %}
+    Number of athletes: {{ athlete_list|length }}
+{% elif athlete_in_locker_room_list %}
+    Athletes should be out of the locker room soon!
+{% else %}
+    No athletes.
+{% endif %}</code></pre>
+
+<p>In the above, if <code>athlete_list</code> is not empty, the number of athletes will be
+displayed by the <code>{{ athlete_list|length }}</code> variable.</p>
+
+<p>As you can see, the <code>if</code> tag may take one or several <code>{% elif %}</code>
+clauses, as well as an <code>{% else %}</code> clause that will be displayed if all
+previous conditions fail. These clauses are optional.</p>
+
+<p>The <code>if</code> tag is very expressive, see <a href="/wiki/if-details" title="wiki link">if-details</a> for details.</p>
+
+
+<h2>ifchanged</h2>
+
+<p>Check if a value has changed from the last iteration of a loop.</p>
+
+<p>The <code>{% ifchanged %}</code> block tag is used within a loop. It has two possible
+uses.</p>
+
+<ol><li><p>Checks its own rendered contents against its previous state and only
+displays the content if it has changed. For example, this displays a list of
+days, only displaying the month if it changes:</p>
+
+<pre class="sh_javascript"><code>&lt;h1&gt;Archive for {{ year }}&lt;/h1&gt;
+
+{% for date in days %}
+    {% ifchanged %}&lt;h3&gt;{{ date|date:"F" }}&lt;/h3&gt;{% endifchanged %}
+    &lt;a href="{{ date|date:"M/d"|lower }}/"&gt;{{ date|date:"j" }}&lt;/a&gt;
+{% endfor %}</code></pre></li>
+
+<li><p>If given one or more variables, check whether any variable has changed.
+For example, the following shows the date every time it changes, while
+showing the hour if either the hour or the date has changed:</p>
+
+<pre class="sh_javascript"><code>{% for date in days %}
+    {% ifchanged date.date %} {{ date.date }} {% endifchanged %}
+    {% ifchanged date.hour date.date %}
+        {{ date.hour }}
+    {% endifchanged %}
+{% endfor %}</code></pre></li></ol>
+
+<p>The <code>ifchanged</code> tag can also take an optional <code>{% else %}</code> clause that
+will be displayed if the value has not changed:</p>
+
+<pre class="sh_javascript"><code>    {% for match in matches %}
+        &lt;div style="background-color:
+            {% ifchanged match.ballot_id %}
+                {% cycle "red" "blue" %}
+            {% else %}
+                grey
+            {% endifchanged %}
+        "&gt;{{ match }}&lt;/div&gt;
+    {% endfor %}</code></pre>
+
+
+
+<h2>ifequal</h2>
+
+<p>Output the contents of the block if the two arguments equal each other.</p>
+
+<p>Example:</p>
+
+<pre class="sh_javascript"><code>{% ifequal user.pk comment.user_id %}
+    ...
+{% endifequal %}</code></pre>
+
+<p>As in the <code>if</code> tag, an <code>{% else %}</code> clause is optional.</p>
+
+<p>The arguments can be hard-coded strings, so the following is valid:</p>
+
+<pre class="sh_javascript"><code>{% ifequal user.username "adrian" %}
+    ...
+{% endifequal %}</code></pre>
+
+<p>An alternative to the <code>ifequal</code> tag is to use the <code>if</code> tag and the
+<code>==</code> operator.</p>
+
+
+
+<h2>ifnotequal</h2>
+
+<p>Just like <code>ifequal</code>, except it tests that the two arguments are not
+equal.</p>
+
+<p>An alternative to the <code>ifnotequal</code> tag is to use the <code>if</code> tag and
+the <code>!=</code> operator.</p>
+
+
+
+<h2>include</h2>
+
+<p>Loads a template and renders it with the current context. This is a way of
+"including" other templates within a template.</p>
+
+<p>The template name can either be a variable or a hard-coded (quoted) string,
+in either single or double quotes.</p>
+
+<p>This example includes the contents of the template <code>"foo/bar.html"</code>:</p>
+
+<pre class="sh_javascript"><code>{% include "foo/bar.html" %}</code></pre>
+
+<p>This example includes the contents of the template whose name is contained in
+the variable <code>template_name</code>:</p>
+
+<pre class="sh_javascript"><code>{% include template_name %}</code></pre>
+
+<p>An included template is rendered with the context of the template that's
+including it. This example produces the output <code>"Hello, John"</code>:</p>
+
+<ul><li>Context: variable <code>person</code> is set to <code>"john"</code>.</li>
+<li>Template:
+
+{% include "name_snippet.html" %}</li>
+
+<li><p>The <code>name_snippet.html</code> template:</p>
+
+<p>{{ greeting }}, {{ person|default:"friend" }}!</p></li></ul>
+
+<p>You can pass additional context to the template using keyword arguments:</p>
+
+<pre class="sh_javascript"><code>{% include "name_snippet.html" with person="Jane" greeting="Hello" %}</code></pre>
+
+<p>If you want to only render the context with the variables provided (or even
+no variables at all), use the <code>only</code> option:</p>
+
+<pre class="sh_javascript"><code>{% include "name_snippet.html" with greeting="Hi" only %}</code></pre>
+
+.. note:
+<pre class="sh_javascript"><code>The `include` tag should be considered as an implementation of
+"render this subtemplate and include the HTML", not as "parse this
+subtemplate and include its contents as if it were part of the parent".
+This means that there is no shared state between included templates --
+each include is a completely independent rendering process.</code></pre>
+
+
+<h2>loadtag / loadfilter</h2>
+
+<p>Loads a custom template tag- or filter- set.</p>
+
+<p>For example, the following template would load all filters
+registered in <code>somelibrary</code> and <code>otherlibrary</code> located in package
+<code>package</code>:</p>
+
+<pre class="sh_javascript"><code>{% loadfilter somelibrary package.otherlibrary %}</code></pre>
+
+<p>You can also selectively load individual filters or tags from a library, using
+the <code>from</code> argument. In this example, the template tags named <code>foo</code>
+and <code>bar</code> will be loaded from <code>somelibrary</code>:</p>
+
+<pre class="sh_javascript"><code>{% loadtag foo bar from somelibrary %}</code></pre>
+
+<p>See <a href="custom-template-tags.md">Custom tag and filter libraries</a> for
+more information.</p>
+
+
+<h2>spaceless</h2>
+
+<p>Removes whitespace between HTML tags. This includes tab
+characters and newlines.</p>
+
+<p>Example usage:</p>
+
+<pre class="sh_javascript"><code>{% spaceless %}
+    &lt;p&gt;
+        &lt;a href="foo/"&gt;Foo&lt;/a&gt;
+    &lt;/p&gt;
+{% endspaceless %}</code></pre>
+
+<p>This example would return this HTML:</p>
+
+<pre class="sh_javascript"><code>&lt;p&gt;&lt;a href="foo/"&gt;Foo&lt;/a&gt;&lt;/p&gt;</code></pre>
+
+<p>Only space between <em>tags</em> is removed -- not space between tags and text. In
+this example, the space around <code>Hello</code> won't be stripped:</p>
+
+<pre class="sh_javascript"><code>{% spaceless %}
+    &lt;strong&gt;
+        Hello
+    &lt;/strong&gt;
+{% endspaceless %}</code></pre>
+
+
+<p><h2>verbatim</h2>
+Stops the template engine from rendering the contents of this block tag.</p>
+
+<p>A common use is to allow a Javascript template layer that collides with
+Reinhardt's syntax. For example:</p>
+
+<pre class="sh_javascript"><code>{% verbatim %}
+    {{if dying}}Still alive.{{/if}}
+{% endverbatim %}</code></pre>
+
+<p>You can also designate a specific closing tag, allowing the use of
+<code>{% endverbatim %}</code> as part of the unrendered contents:</p>
+
+<pre class="sh_javascript"><code>{% verbatim myblock %}
+    Avoid template rendering via the {% verbatim %}{% endverbatim %} block.
+{% endverbatim myblock %}</code></pre>
+
+
+
+<h2>widthratio</h2>
+
+<p>For creating bar charts and such, this tag calculates the ratio of a given
+value to a maximum value, and then applies that ratio to a constant.</p>
+
+<p>For example:</p>
+
+<pre class="sh_javascript"><code>&lt;img src="bar.png" alt="Bar"
+     height="10" width="{% widthratio this_value max_value max_width %}" /&gt;</code></pre>
+
+<p>If <code>this_value</code> is 175, <code>max_value</code> is 200, and <code>max_width</code> is 100, the
+image in the above example will be 88 pixels wide
+(because 175/200 = .875; .875 * 100 = 87.5 which is rounded up to 88).</p>
+
+
+
+<h2>with</h2>
+
+<p>Caches a complex variable under a simpler name. This is useful when accessing
+an "expensive" method (e.g., one that hits the database) multiple times.</p>
+
+<p>For example:</p>
+
+<pre class="sh_javascript"><code>{% with total=business.employees.count %}
+    {{ total }} employee{{ total|pluralize }}
+{% endwith %}</code></pre>
+
+<p>The populated variable (in the example above, <code>total</code>) is only available
+between the <code>{% with %}</code> and <code>{% endwith %}</code> tags.</p>
+
+<p>You can assign more than one context variable:</p>
+
+<pre class="sh_javascript"><code>{% with alpha=1 beta=2 %}
+    ...
+{% endwith %}</code></pre>
+
+
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <p>This installs <code>get</code>, <code>post</code>, <code>put</code>, and <code>del</code> methods in the application
+object for routing requests with the corresponding HTTP methods. These
+methods take a path spec as first argument and a function as second argument.</p>
+
+<h3>Paths and Placeholders</h3>
+
+<p>The path spec can consist of static parts and placeholders.
+Named placeholders are prefixed by <code>:</code> (colon) and match all
+characters except for <code>/</code> (slash) and <code>.</code> (dot). A named
+placeholder can be marked as optional by appending <code>?</code> (question mark).
+Unnamed placeholders are denoted by the asterisk character <code>*</code> and match
+all characters including slashes and dots.</p>
+
+<p>In the following example, ":id" is a named placeholder:</p>
+
+<pre class="sh_javascript"><code>"/post/:id"</code></pre>
+
+<p>All placeholders are passed to the action function as positional arguments
+following the request object in the order in which they appear in the path spec.
+Unmatched optional placeholders will be <code>undefined</code>.</p>
+
+<pre class="sh_javascript"><code>app.get("/post/:id", function(req, id) {...});</code></pre>
+
+<h3>Reverse Routing</h3>
+
+<p>The route middleware supports generating URLs from route names and parameters
+required by the route.</p>
+
+<p>Routes names are derived from the route's path spec by stripping
+out all placeholders and removing a leading slash. For example, a path
+spec <code>/post/:id.html</code> results in route name "post.html". If a path spec
+does not contain any static part, its route name is "index".</p>
+
+<p>Passing a valid route name and the parameters required by the route to the <code>route.reverse</code>
+method will return the URI path for the corresponding action. For example,
+with a route spec <code>/post/:id.html</code>, calling <code>app.route.reverse({action: "post.html", id: 5})</code>
+will return the string "/post/5.html".</p>
+
+<pre class="sh_javascript"><code>app.get("/", function() {...})
+app.post("/", function(req) {...})
+app.get("/:id.:format?", function(req, id, format) {...})
+app.del("/:id", function(req, id) {...})
+app.put("/:id", function(req, id) {...})</code></pre>
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

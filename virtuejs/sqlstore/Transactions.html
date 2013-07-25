@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <h1>Transactions</h1>
+
+<p>SQLstore supports transactions in multiple ways. The first is to manually open a transaction and pass it to every call of an entity's <code>save</code> or <code>remove</code> method.</p>
+
+<pre class="sh_javascript"><code>var transaction = store.createTransaction();
+var author = new Author({
+    "name": "John Doe"
+});
+author.save(transaction);
+// ...
+transaction.commit();</code></pre>
+
+<p>To roll back a transaction call <code>.rollback()</code> of the Transaction instance. Every transaction instance has a method <code>isDirty()</code> that returns true for transactions having uncommitted changes.</p>
+
+<p>Keeping a reference to the created transaction instance to pass it to <code>save()</code> or <code>remove()</code> can be cumbersome, so SQLstore supports a second, albeit less explicit way of using transactions:</p>
+
+<pre class="sh_javascript"><code>// create a new transaction
+store.beginTransaction();
+var author = new Author({
+    "name": "John Doe"
+});
+author.save();
+
+// ...
+
+// commit the transaction
+store.commitTransaction();</code></pre>
+
+<p><code>beginTransaction()</code> creates a new transaction instance and binds it to the current thread. After calling this method you can operate freely without having to pass a transaction instance to <code>save()</code> or <code>remove()</code>. You can even manually create a separate transaction and use this one for a subset of operations if necessary. To commit the thread's transaction call the store's method <code>.commitTransaction()</code>, to abort it <code>.abortTransaction()</code>.</p>
+
+<p>Initiating a transaction like above has an additional benefit: all database operations will use the connection of the transaction, so even if data modifications aren't committed yet they are visible in queries etc. within the thread owning the transaction. Even if collections are invalidated within an open transaction, up-to-then uncommitted changes (eg. an added entity instance) will be visible, again only for the owning thread.</p>
+
+<p>The latter method of creating and committing transactions is used by RingoJS' transaction middleware.</p>
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

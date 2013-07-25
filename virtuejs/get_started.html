@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="./static/main.css" />
+<link rel="stylesheet" href="./static/sh_hns.css" />
+<link rel="stylesheet" href="./static/tutorial.css" />
+<script type="text/javascript" src="./static/sh_main.js"></script>
+<script type="text/javascript" src="./static/sh_javascript.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="./static/html5.js"></script>
+<![endif]-->
+
+
+</head>
+
+<body onload="sh_highlightDocument()" lang="en">
+
+  <header>
+    <nav class="navigation">
+      <h1><a href="/"><img src="./static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
+      <ul>
+        <li><a href="/get_started">Get Started</a></li>
+        <li><a href="/reinhardt.md">The template layer</a></li>
+        <li><a href="/sqlstore.md">The model layer</a></li>
+        <li><a href="/stick.md">The view layer</a></li>
+      </ul>
+    </nav>
+    <div style="clear: both;"></div>
+  </header>
+
+  <main class="main">
+
+    <div class="content">
+      <p>You need to install RingoJs and its package manager "rp". Then download the <a href="https://github.com/oberhamsi/ringo-virtue/archive/master.zip">demo application</a>, unzip it anywhere and start it.</p>
+
+<h2>Windows</h2>
+
+<p>If you are on Windows, the easiest solution is to use our setup.exe. It will configure your %PATH% and install the package manager.</p>
+
+<p>The <a href="https://github.com/oberhamsi/ringo-virtue/archive/master.zip">demo application</a> comes with a <code>start.cmd</code>.</p>
+
+<h2>*nix</h2>
+
+<p>Ringo is released as a <a href="http://ringojs.org/download">debian package</a> as well as <a href="http://ringojs.org/download">zip files</a>.
+Once you have Ringo itself installed, you also need to get the package manager:</p>
+
+<pre class="sh_javascript"><code>$ ringo-admin install http://packages.ringojs.org/download/rp/latest</code></pre>
+
+<p>Inside the <a href="https://github.com/oberhamsi/ringo-virtue/archive/master.zip">demo application</a> you find a <code>start.sh</code>.</p>
+
+<h2>Developers</h2>
+
+<p>The git master of RingoJs is usually stable but keep an eye on the commits. You will need Apache Ant as well as the ivy plugin for Ant to build Ringo.</p>
+
+<pre class="sh_javascript"><code>$ git clone git://github.com/ringo/ringojs.git
+$ cd ringojs
+$ ant update
+$ ant jar</code></pre>
+
+<p>VirtueJs is just a set of package dependencies. If you want to use the git version of those packages, you should check them out somewhere and symlink them into Ringo's "packages" directory. Check the "package.json" of the demo application to see which packages you need.</p>
+
+
+    </div>
+
+    <div class="submenu">
+      <div class="wrapper">
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <nav class="ringolinks">
+      <ul>
+        <li><h4>Templates</h4></li>
+        <li><a href="/reinhardt/templates.md">Syntax overview</a></li>
+        <li><a href="/reinhardt/filters.md">Filter reference</a></li>
+        <li><a href="/reinhardt/tags.md">Tag reference</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>Models</h4></li>
+        <li><a href="/sqlstore/Basics.md">Connecting to the database</a></li>
+        <li><a href="/sqlstore/Mapping.md">Model mapping</a></li>
+        <li><a href="/sqlstore/Query.md">Querying</a></li>
+      </ul>
+
+      <ul>
+        <li><h4>View</h4></li>
+        <li><a href="/stick/route.md">Routing definitions</a></li>
+      </ul>
+      <ul>
+        <li><h4>Other</h4></li>
+        <li><a href="/deployment.md">Deployment</a></li>
+      </ul>
+    </nav>
+  </footer>
+
+
+<script type="text/javascript">
+  (function() {
+    var stss = document.createElement('script');
+    stss.type = 'text/javascript';
+    stss.async = true;
+    stss.src = 'http://stats.nekapuzer.at/hit/?referer=' +
+         escape(document.referrer) +
+         '&site=ringojs' +
+         '&random=' + (new Date()).getTime();
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(stss, s);
+  })();
+</script>
+</body>
+</html>

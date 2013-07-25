@@ -54,7 +54,7 @@ if (require.main === module) {
    var opts = parser.parse(system.args.slice(1));
    var masterContent = fs.read(module.resolve('./templates/master.html'));
    if (!opts.outputdir) {
-      opts.outputdir = module.resolve('./_site')
+      opts.outputdir = module.resolve('./virtuejs')
    }
    traverse(opts.contentdir);
    fs.copyTree(module.resolve('./static'), fs.join(opts.outputdir, 'static/'));
