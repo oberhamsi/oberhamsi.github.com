@@ -69,4 +69,5 @@ if (require.main === module) {
     ' -s external/stick/lib/ -d ' + stickDestination +
     ' -p external/stick/package.json -n "Stick API"';
    var ret = command(renderStickApi);
+   print (ret)
 }
