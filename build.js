@@ -65,7 +65,7 @@ if (require.main === module) {
    fs.copyTree(module.resolve('./static'), fs.join(opts.outputdir, 'static/'));
    var stickDestination = fs.join(opts.outputdir, 'stick');
    fs.removeTree(stickDestination)
-   var renderStickApi = "ringo-doc --template " + masterTemplatePath +
+   var renderStickApi = "ringo " + module.resolve('./jsdoc/main.js') + " --template " + masterTemplatePath +
     ' -s external/stick/lib/ -d ' + stickDestination +
     ' -p external/stick/package.json -n "Stick API"';
    var ret = command(renderStickApi);
