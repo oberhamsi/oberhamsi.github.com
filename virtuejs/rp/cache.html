@@ -57,28 +57,22 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp cache</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp cache update
+rp cache init</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h2>Description</h2>
+
+<p><code>rp</code> keeps a copy of the package registry catalog in its home directory (<code>~/.rp/</code> on *nix systems, <code>$USER_HOME\rp\</code> on Windows systems). </p>
+
+<p>After switching to a different package registry you must call <code>rp cache init</code> to reset the cache. <code>rp cache update</code> merges changes from the remote package registry into your local cache.</p>
+
+<p>However under normal circumstances you'll never need to use this command directly, as <code>rp</code> fetches catalog updates whenever you'll access the registry (eg. during install or update).</p>
 
 
-        </div>
 
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
 
-            </div>
-    
   </div>
 </div>
 

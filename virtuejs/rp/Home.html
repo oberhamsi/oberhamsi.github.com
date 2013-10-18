@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://localhost/virtuejs//static/main.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/tutorial.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/sh_hns.css" />
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_main.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/jquery.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://localhost/virtuejs//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://localhost/virtuejs/" id="logo">VirtueJs</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://localhost/virtuejs//stick.html">Views</a>
+      </li>
+      <li>
+        <a href="http://localhost/virtuejs//reinhardt.html">Templates</a>
+        <ul>
+          <li>
+            <a href="http://localhost/virtuejs//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://localhost/virtuejs//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://localhost/virtuejs//sqlstore.html">Models</a>
+        <ul>
+          <li>
+            <a href="http://localhost/virtuejs//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://localhost/virtuejs//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://localhost/virtuejs//rp/Home.html">Ringo package manager</a>
+      </li>
+
+  </div>
+  <div id="content">
+      <h1>About</h1>
+
+<p><code>rp</code> is a package manager for <a href="http://ringojs.org/">RingoJS</a>. It aims to provide an easy way to both manage packages of local RingoJS installations and to publish packages in a remote package registry.</p>
+
+<h1>Status</h1>
+
+<p>rp is beta. rp <strong>modifies the filesystem</strong> so beware of using it on production systems without an up-to-date backup.</p>
+
+<h1>Installation</h1>
+
+<p><code>rp</code> can be easily installed using <code>ringo-admin</code> tool:</p>
+
+<pre class="sh_javascript"><code>ringo-admin install http://packages.ringojs.org/download/rp/latest</code></pre>
+
+<h1>Usage</h1>
+
+<p>If you have RingoJS' <code>bin</code> directory in the path (which you should), you can start rp by simply entering</p>
+
+<pre class="sh_javascript"><code>rp</code></pre>
+
+<p>on the command line. If called without a command rp will output the list of available commands. To get detailed information about a command simply call</p>
+
+<pre class="sh_javascript"><code>rp help &lt;command&gt;</code></pre>
+
+<p>Replace <command> with the command you want information about.</p>
+
+<h1>Most important day-to-day commands</h1>
+
+<ul><li><a href="./wiki/search">search</a> Search for packages in registry</li>
+<li><a href="./wiki/install">install</a> Install a package or package dependencies</li>
+<li><a href="./wiki/update">update</a> Updates installed packages</li>
+<li><a href="./wiki/list">list</a> Lists installed packages</li>
+<li><a href="./wiki/uninstall">uninstall</a> Uninstalls a package</li></ul>
+
+<h1>Commands for package authors</h1>
+
+<ul><li><a href="./wiki/createuser">createuser</a> Creates a registry account</li>
+<li><a href="./wiki/publish">publish</a> Publishes a package</li>
+<li><a href="./wiki/owner">owner</a> Lists and manages package owners</li>
+<li><a href="./wiki/password">password</a> Change registry account password</li>
+<li><a href="./wiki/unpublish">unpublish</a> Removes a published package in the registry</li></ul>
+
+<h1>Maintenance commands</h1>
+
+<ul><li><a href="./wiki/cache">cache</a></li>
+<li><a href="./wiki/config">config</a></li></ul>
+
+<h1>Uninstallation</h1>
+
+<p><code>rp</code> can uninstall itself, so simply use</p>
+
+<pre class="sh_javascript"><code>rp uninstall rp</code></pre>
+
+<p>if you ever want to get rid of it.</p>
+
+<h1>Bugs/Enhancements</h1>
+
+<p>If you encounter bugs or unexpected behaviour, or have any ideas on how to make rp better, please file an <a href="https://github.com/grob/rp/issues">issue</a> on GitHub.</p>
+
+
+<h1>Disclaimer</h1>
+
+<p><code>rp</code> is provided as-is, without warranty of any kind, expressed or implied.</p>
+
+<p>The packages in the <a href="http://packages.ringojs.org/">RingoJS Package Registry</a> registry are the sole property of their respective maintainers, and are in no way affiliated with or endorsed by <a href="http://packages.ringojs.org/">RingoJS Package Registry</a> or the maintainers of the registry. There is absolutely no guarantee, warrantee, or assertion made as to the quality, fitness for a specific purpose or lack of malice in any given package published in the <a href="http://packages.ringojs.org/">RingoJS Package Registry</a> registry.</p>
+
+
+
+
+  </div>
+</div>
+
+</body>
+

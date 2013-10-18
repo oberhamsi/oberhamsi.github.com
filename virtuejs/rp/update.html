@@ -57,28 +57,23 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp update</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp update [options] [&lt;name&gt; [&lt;name&gt; …]]</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h3>Options</h3>
+
+<pre class="sh_javascript"><code>-g/--global Update global packages</code></pre>
+
+<h2>Description</h2>
+
+<p><code>rp update</code> searches for available updates in the registry.</p>
+
+<p>If called without arguments, <code>rp update</code> will try to update all local or global packages, depending on whether the <code>-g/--global</code> option has been used. If one or multiple package names have been specified, <code>rp update</code> will only update those.</p>
+
+<p>Note that in either case <code>rp update</code> will try to keep the installed packages consistent, meaning it won't offer a package update if the updated version would conflict with the dependencies of one or more installed packages.</p>
 
 
-        </div>
-
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

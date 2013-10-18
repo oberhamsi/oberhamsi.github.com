@@ -57,28 +57,26 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp publish</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp publish [options]</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h3>Options</h3>
+
+<pre class="sh_javascript"><code>-f/--force Force publishing of a package</code></pre>
+
+<h2>Description</h2>
+
+<p><code>rp publish</code> allows you to publish a package in the registry. Publishing is a simple step:</p>
+
+<ul><li>Change into the directory containing your package</li>
+<li>Type <code>rp publish</code></li></ul>
+
+<p><code>rp publish</code> will then check if the <code>package.json</code> file contains the required information, create a zipball of the directory contents and publish it in the registry.</p>
+
+<p>Use the <code>-f/--force</code> flag to re-publish a package version. Note that you shouldn't do that if the package has been published for a while - in these cases it's probably better to create a new version since <code>rp</code> won't touch already installed packages if the version number doesn't change.</p>
 
 
-        </div>
-
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

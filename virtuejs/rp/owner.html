@@ -57,28 +57,23 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp owner</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp owner &lt;package&gt;
+rp owner &lt;package&gt; add &lt;owner&gt;
+rp owner &lt;package&gt; remove &lt;owner&gt;</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h2>Description</h2>
+
+<p><code>rp owner</code> allows to display or maintain package owners in the registry. Every package published in the registry has at least one owner, starting with the one that published the package in the registry. Only owners of a package are allowed to modify a package in the registry or publish new versions.</p>
+
+<p>If called with just a package name as argument, <code>rp owner</code> will list the users who have the right to modify the package and publish new versions. This can be handy if you'll need to contact them directly.</p>
+
+<p>To add a new owner do a <code>rp owner &lt;package&gt; add &lt;owner&gt;</code>, specifying the package and the name of the user to whom package maintenance rights should be granted. Obviously you need to be among the package owners to grant those rights.</p>
+
+<p>To revoke package maintenance rights of a user do <code>rp owner &lt;package&gt; remove &lt;owner&gt;</code>. Again only owners can do that. Note that you can remove yourself from the list of owners of a package, as long as there's at least one owner left (useful eg. when transferring ownership to a different user).</p>
 
 
-        </div>
-
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

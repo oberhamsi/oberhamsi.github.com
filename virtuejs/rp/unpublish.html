@@ -57,28 +57,17 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp unpublish</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp unpublish &lt;name&gt; [version]</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h2>Description</h2>
+
+<p><code>rp unpublish</code> removes a specific version or a whole package including all of its versions from the registry.</p>
+
+<p>You need to be a package owner to do that. This command should only be used in case of erronous package publications. Obviously it's a bad idea to remove a whole package from the registry, unless you can be sure it's never been installed anywhere.</p>
 
 
-        </div>
-
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

@@ -57,28 +57,31 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp install</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp install
+rp install [options] &lt;name&gt; [version]
+rp install [options] &lt;zipball url&gt;
+rp install [options] &lt;zipball file&gt;</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h3>Options</h3>
+
+<pre class="sh_javascript"><code>-g/--global Install packages globally</code></pre>
+
+<h2>Description</h2>
+
+<p><code>rp install</code> lets you install packages from various sources:</p>
+
+<ul><li>If called without arguments, <code>rp</code> searches for a <code>package.json</code> file starting in the current working directory and going upwards. If it finds one containing a dependencies hash, <code>rp install</code> will install those dependencies in a <code>packages</code> directory underneath the directory containing the <code>package.json</code> file. This is useful after installing an application, or during development of a package. <code>rp</code> will use the configured registry to fetch the dependency packages, using the version definition in the <code>package.json</code> file.</li>
+<li>If called with a <code>&lt;name&gt;</code> argument <code>rp</code> will search for the package in the registry catalog and install it. If no version has been specified, <code>rp</code> will install the latest version of the package, otherwise it'll install the version that matches the version number given.</li>
+<li>If called with the URL of a zipball as argument, <code>rp</code> will retrieve the zipball and install it.</li>
+<li>If the argument is a path to a zipball, rp will install it.</li></ul>
+
+<p>Note that in all cases described above <code>rp</code> will also check the dependencies of the package about to be installed, and try to resolve them.</p>
+
+<p>In general <code>rp</code> tries to be both explicit and defensive when installing packages (the same applies when updating packages), meaning it will only install packages if the <code>packages</code> directory doesn't contain a symlink, file or directory with the name of the package to be installed. Instead it will display a warning for those packages that can't be installed.</p>
 
 
-        </div>
-
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

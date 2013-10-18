@@ -57,28 +57,23 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp list</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp list [options]</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h3>Options</h3>
+
+<pre class="sh_javascript"><code>-g/--global List global packages
+-v/--verbose Display verbose information</code></pre>
+
+<h2>Description</h2>
+
+<p><code>rp list</code> displays the installed packages, either the locally installed ones or the globally installed packages (if <code>-g</code> or <code>--global</code> option is given).</p>
+
+<p>If the <code>-v/--verbose</code> flag is given, <code>rp list</code> displays verbose information for each package (the installation directory of the package, the package description, author and any dependencies of the package).</p>
 
 
-        </div>
 
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

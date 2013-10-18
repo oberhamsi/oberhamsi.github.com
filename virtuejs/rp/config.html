@@ -57,28 +57,21 @@
 
   </div>
   <div id="content">
-      
-            <h1 class="modulename">Module stick/middleware/notfound</h1>
-        <div class="fileoverview">
-            <p>Middleware for simple Not-Found pages.</p>
+      <h1>rp config</h1>
 
-<p>By default, resource <code>stick/middleware/notfound.html</code> is used as page template.
-This can be set through the <code>app.notfound.template</code> property.</p>
+<pre class="sh_javascript"><code>rp config</code></pre>
 
-<ul><li><p><strong>template</strong> the notfound page template (<em>string</em>)</p></li></ul>
+<h2>Description</h2>
+
+<p>While <code>rp</code> is pretty much configuration-free, there might be situations where you'll need to reconfigure it (eg. when switching between different RingoJS installations or between package registries).</p>
+
+<p>With <code>rp config</code> you can interactively configure which local RingoJS installation <code>rp</code> should use, and which package registry it should work with.</p>
+
+<p>rp stores it's configuration in a subdirectory of the user's home directory. On Linux/OS X the directory is <code>$HOME/.rp/</code>, on Windows <code>USER_HOME/rp/</code>. The configuration data will be stored in a file "config" within the rp directory.</p>
+
+<p><strong><em>Tip</strong></em>: Whenever you switch to a different package registry do a <code>rp cache init</code> afterwards to ensure that the cached registry catalog is updated.</p>
 
 
-        </div>
-
-                <div>
-            <h4> Example </h4>
-            <pre class="sh_javascript sh_sourceCode">app.configure("notfound");
-app.notfound.template = "templates/404.html";</pre>
-        </div>
-        <div class="classoverview">
-
-            </div>
-    
   </div>
 </div>
 

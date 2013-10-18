@@ -5,44 +5,58 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
 
-<link rel="stylesheet" href="/static/main.css" />
-<link rel="stylesheet" href="/static/sh_hns.css" />
-<link rel="stylesheet" href="/static/tutorial.css" />
-<script type="text/javascript" src="/static/sh_main.js"></script>
-<script type="text/javascript" src="/static/sh_javascript.js"></script>
-<script type="text/javascript" src="/static/jquery.js"></script>
-<script type="text/javascript" src="/static/main.js"></script>
+<link rel="stylesheet" href="http://localhost/virtuejs//static/main.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/tutorial.css" />
+<link rel="stylesheet" href="http://localhost/virtuejs//static/sh_hns.css" />
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_main.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/jquery.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/main.js"></script>
 
 <!--[if lte IE 8]>
-<script type="text/javascript" src="/static/html5.js"></script>
+<script type="text/javascript" src="http://localhost/virtuejs//static/html5.js"></script>
 <![endif]-->
 
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="../../static/jsdoc.css" />
-<link rel="stylesheet" href="../../static/style.css" />
-<script type="text/javascript" src="../../static/jquery.min.js"></script>
-<script type="text/javascript" src="../../static/jsdoc.js"></script>
-
 </head>
+<body onload="sh_highlightDocument()">
 
-<body onload="sh_highlightDocument()" lang="en">
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://localhost/virtuejs/" id="logo">VirtueJs</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://localhost/virtuejs//stick.html">Views</a>
+      </li>
+      <li>
+        <a href="http://localhost/virtuejs//reinhardt.html">Templates</a>
+        <ul>
+          <li>
+            <a href="http://localhost/virtuejs//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://localhost/virtuejs//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://localhost/virtuejs//sqlstore.html">Models</a>
+        <ul>
+          <li>
+            <a href="http://localhost/virtuejs//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://localhost/virtuejs//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://localhost/virtuejs//rp/Home.html">Ringo package manager</a>
+      </li>
 
-  <header>
-    <nav class="navigation">
-      <h1><a href=""><img src="/static/virtuejs-logo.png" alt="VirtueJs" title="Home" /></a></h1>
-      <ul>
-        <li><a href="/get_started.html">Get Started</a></li>
-        <li><a href="/reinhardt.html">The template layer</a></li>
-        <li><a href="/sqlstore.html">The model layer</a></li>
-        <li><a href="/stick.html">The view layer</a></li>
-      </ul>
-    </nav>
-    <div style="clear: both;"></div>
-  </header>
-
-  <main class="main">
-
-    <div class="content">
+  </div>
+  <div id="content">
       
             <h1 class="modulename">Module stick/middleware/mount</h1>
         <div class="fileoverview">
@@ -83,73 +97,8 @@ app.mount("/wiki", module.resolve("vendor/ringowiki"));</pre>
 
             </div>
     
-    </div>
-
-    <div class="submenu">
-      <div class="wrapper">
-        <!-- <div class="jsdocSidenav">
-   <div class="toggles">
-      <a href="../../">&bull; Modules</a>
-      <a href="../../index_all.html">&bull; Overview</a>
-   </div>
-
-   <input id="filter" type="text" placeholder="Filter modules" />
-
-   <ul id="modulelist">
-            <li><a href="../../stick/">stick</a></li>
-            <li><a href="../../helpers/">stick/helpers</a></li>
-            <li><a href="../../middleware/">stick/middleware</a></li>
-            <li><a href="../../middleware/basicauth/">stick/middleware/basicauth</a></li>
-            <li><a href="../../middleware/continuation/">stick/middleware/continuation</a></li>
-            <li><a href="../../middleware/cookies/">stick/middleware/cookies</a></li>
-            <li><a href="../../middleware/error/">stick/middleware/error</a></li>
-            <li><a href="../../middleware/etag/">stick/middleware/etag</a></li>
-            <li><a href="../../middleware/gzip/">stick/middleware/gzip</a></li>
-            <li><a href="../../middleware/method/">stick/middleware/method</a></li>
-            <li><a href="../../middleware/mount/">stick/middleware/mount</a></li>
-            <li><a href="../../middleware/notfound/">stick/middleware/notfound</a></li>
-            <li><a href="../../middleware/params/">stick/middleware/params</a></li>
-            <li><a href="../../middleware/profiler/">stick/middleware/profiler</a></li>
-            <li><a href="../../middleware/render/">stick/middleware/render</a></li>
-            <li><a href="../../middleware/requestlog/">stick/middleware/requestlog</a></li>
-            <li><a href="../../middleware/route/">stick/middleware/route</a></li>
-            <li><a href="../../middleware/session/">stick/middleware/session</a></li>
-            <li><a href="../../middleware/static/">stick/middleware/static</a></li>
-            <li><a href="../../middleware/upload/">stick/middleware/upload</a></li>
-      </ul>
+  </div>
 </div>
- -->
-      </div>
-    </div>
-
-  </main>
-
-  <footer>
-    <nav class="ringolinks">
-      <ul>
-        <li><h4>Templates</h4></li>
-        <li><a href="/reinhardt/templates.html">Syntax overview</a></li>
-        <li><a href="/reinhardt/filters.html">Filter reference</a></li>
-        <li><a href="/reinhardt/tags.html">Tag reference</a></li>
-      </ul>
-
-      <ul>
-        <li><h4>Models</h4></li>
-        <li><a href="/sqlstore/Basics.html">Connecting to the database</a></li>
-        <li><a href="/sqlstore/Mapping.html">Model mapping</a></li>
-        <li><a href="/sqlstore/Query.html">Querying</a></li>
-      </ul>
-
-      <ul>
-        <li><h4>View</h4></li>
-        <li><a href="/stick/route.html">Routing definitions</a></li>
-      </ul>
-      <ul>
-        <li><h4>Other</h4></li>
-        <li><a href="/deployment.html">Deployment</a></li>
-      </ul>
-    </nav>
-  </footer>
 
 </body>
-</html>
+
