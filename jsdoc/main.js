@@ -81,7 +81,8 @@ function writeModuleList(directory, repository) {
         rootPath: './',
         markdown: function(text) {
             return markdown.process(text);
-        }
+        },
+        baseUri: opts.baseuri
     });
 
     context.head = mustache.to_html(templates.head, context);
@@ -155,7 +156,8 @@ function writeModuleDoc(directory, repository, module){
         },
         newlineList: function(value) {
             return value && value.length ? value.join('<br />') : '';
-        }
+        },
+        baseUri: opts.baseuri
     });
     context.head = mustache.to_html(templates.head, context);
     context.menu = mustache.to_html(templates.menu, context);
@@ -181,7 +183,8 @@ function writeRepositoryIndex(directory, repository) {
         },
         limit: function(value) {
             return value ? value.substr(0, 100) + '...' : '';
-        }
+        },
+        baseUri: opts.baseuri
     });
     context.head = mustache.to_html(templates.head, context);
     context.menu = mustache.to_html(templates.menu, context);
@@ -203,6 +206,7 @@ function writeRepositoryIndex(directory, repository) {
  *
  * @param args
  */
+var opts = null;
 function main(args) {
 
     /**
@@ -224,10 +228,11 @@ function main(args) {
     parser.addOption('n', 'name', 'name', 'Name of the Repository (default: auto generated from path)');
     parser.addOption('q', 'quiet', null, 'Do not output any messages.');
     parser.addOption('p', 'package', 'package.json', 'Use package manifest to adjust module names.')
+    parser.addOption(null, 'baseuri', 'baseuri', 'Available in template as {{baseUri}}')
     parser.addOption(null, 'file-urls', null, 'Add "index.html" to all URLs for file:// serving.');
     parser.addOption('h', 'help', null, 'Print help message and exit');
 
-    var opts = parser.parse(args);
+    opts = parser.parse(args);
     if (opts.help) {
         help();
         return;

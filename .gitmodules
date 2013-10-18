@@ -8,3 +8,6 @@ k
 [submodule "external/stick"]
 	path = external/stick
 	url = https://github.com/ringo/stick.git
+[submodule "external/rp"]
+	path = external/rp
+	url = git://github.com/grob/rp.wiki.git

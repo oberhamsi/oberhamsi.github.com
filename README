@@ -1,5 +1,24 @@
-
+# first time setup
 
    $ git submodule init
    $ git submodule update
+
+And to build the html site I suggest you use those settings:
+
    $ ./build.js -c ./site/ -b http://localhost/virtuejs/ -o ./virtuejs/
+
+
+  * -c input directory
+  * -b base uri
+  * -o output directory
+
+
+# modifying/adding to the site
+
+All markdown files in the folder ./site/ are processed using the master template "./templates/master.html" to generate the HTML files in ./virtuejs/
+
+If you have a project with markdown documentation, it is fairly easy to add it. Submodule clone it into the ./external/ folder and make a symlink from site to your new project checkout.
+
+  * git add submodule git://my/project external/myproject
+  * ln -s external/myproject site/myproject
+

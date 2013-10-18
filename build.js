@@ -66,8 +66,12 @@ if (require.main === module) {
    var stickDestination = fs.join(opts.outputdir, 'stick');
    fs.removeTree(stickDestination)
    var renderStickApi = "ringo " + module.resolve('./jsdoc/main.js') + " --template " + masterTemplatePath +
+    ' --baseuri ' + opts.baseuri + 
     ' -s external/stick/lib/ -d ' + stickDestination +
-    ' -p external/stick/package.json -n "Stick API"';
+    ' -p external/stick/package.json ' +
+    ' -n "Stick API" ';
+    
+   print (renderStickApi)
    var ret = command(renderStickApi);
    print (ret)
 }
