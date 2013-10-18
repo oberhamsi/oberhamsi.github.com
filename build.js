@@ -16,6 +16,19 @@ function renderMarkdown(file) {
     return markdown.process(fs.read(file), {
         getLink: function(id) {
             var link = this.super$getLink(id);
+            if (link === null) {
+              // mediawiki syntax
+              // [[Link]]
+              // [[name | link]]
+              if (id.substring(0,1) === '[' && id.substring(id.length-1) === ']') {
+                var idNoBrackets = id.substring(1,id.length-1);
+                var pipeParts = idNoBrackets.split('|');
+                if (pipeParts.length === 2) {
+                  return [pipeParts[1] + '.html', pipeParts[0]];
+                }
+                return [idNoBrackets + '.html', 'idNoBrackets'];
+              }
+            }
             return link || ["/wiki/" + id.replace(/\s/g, "_"), "wiki link"];
         },
         openTag: function(tag, buffer) {
