@@ -5,16 +5,16 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
 
-<link rel="stylesheet" href="http://localhost/virtuejs//static/main.css" />
-<link rel="stylesheet" href="http://localhost/virtuejs//static/tutorial.css" />
-<link rel="stylesheet" href="http://localhost/virtuejs//static/sh_hns.css" />
-<script type="text/javascript" src="http://localhost/virtuejs//static/sh_main.js"></script>
-<script type="text/javascript" src="http://localhost/virtuejs//static/sh_javascript.js"></script>
-<script type="text/javascript" src="http://localhost/virtuejs//static/jquery.js"></script>
-<script type="text/javascript" src="http://localhost/virtuejs//static/main.js"></script>
+<link rel="stylesheet" href="http://oberhamsi.github.io/virtuejs//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/virtuejs//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/virtuejs//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/main.js"></script>
 
 <!--[if lte IE 8]>
-<script type="text/javascript" src="http://localhost/virtuejs//static/html5.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/html5.js"></script>
 <![endif]-->
 
 </head>
@@ -23,36 +23,36 @@
 <div id="container">
   <div id="nav">
       <div id="header">
-        <a href="http://localhost/virtuejs/" id="logo">VirtueJs</a>
+        <a href="http://oberhamsi.github.io/virtuejs/" id="logo">VirtueJs</a>
       </div>
     <ul id="sections">
       <li>
-        <a href="http://localhost/virtuejs//stick.html">Views</a>
+        <a href="http://oberhamsi.github.io/virtuejs//stick.html">URL Routing</a>
       </li>
       <li>
-        <a href="http://localhost/virtuejs//reinhardt.html">Templates</a>
+        <a href="http://oberhamsi.github.io/virtuejs//reinhardt.html">Templates</a>
         <ul>
           <li>
-            <a href="http://localhost/virtuejs//reinhardt/tags.html">Tag reference</a>
+            <a href="http://oberhamsi.github.io/virtuejs//reinhardt/tags.html">Tag reference</a>
           </li>
           <li>
-            <a href="http://localhost/virtuejs//reinhardt/filters.html">Filter reference</a>
+            <a href="http://oberhamsi.github.io/virtuejs//reinhardt/filters.html">Filter reference</a>
           </li>
         </ul>
       </li>
       <li>
-        <a href="http://localhost/virtuejs//sqlstore.html">Models</a>
+        <a href="http://oberhamsi.github.io/virtuejs//sqlstore.html">Database access</a>
         <ul>
           <li>
-            <a href="http://localhost/virtuejs//sqlstore/Mapping.html">Mapping</a>
+            <a href="http://oberhamsi.github.io/virtuejs//sqlstore/Mapping.html">Mapping</a>
           </li>
           <li>
-            <a href="http://localhost/virtuejs//sqlstore/Query.html">Queries</a>
+            <a href="http://oberhamsi.github.io/virtuejs//sqlstore/Query.html">Queries</a>
           </li>
         </ul>
       </li>
       <li>
-        <a href="http://localhost/virtuejs//rp/Home.html">Ringo package manager</a>
+        <a href="http://oberhamsi.github.io/virtuejs//rp/Home.html">Ringo package manager</a>
       </li>
 
   </div>
@@ -60,6 +60,18 @@
       <h1>Writing custom template tags</h1>
 
 <p>Tags are more complex than filters, because tags can do anything.</p>
+
+<p><strong>Table of Contents</strong></p>
+
+<ul><li><a href="#a-quick-overview">A quick overview</a></li>
+<li><a href="#writing-the-compilation-function">Writing the compilation function</a></li>
+<li><a href="#writing-the-renderer">Writing the renderer</a></li>
+<li><a href="#auto-escaping-considerations">Auto-escaping considerations</a></li>
+<li><a href="#thread-safety-considerations">Thread-safety considerations</a></li>
+<li><a href="#passing-template-variables-to-the-tag">Passing template variables to the tag</a></li>
+<li><a href="#setting-a-variable-in-the-context">Setting a variable in the context</a></li>
+<li><a href="#parsing-until-another-block-tag">Parsing until another block tag</a></li>
+<li><a href="#parsing-until-another-block-tag-and-saving-contents">Parsing until another block tag, and saving contents</a></li></ul>
 
 <h2>A quick overview</h2>
 
@@ -337,8 +349,8 @@ string literals like this.</li></ol>
     }
     var dateToBeFormatted = bits[1];
     var formatString = bits[2];
-    if (formatString[0] !== formatString.slice(-1) || ['"', "'"].indexOf(formatString) &lt; 0) {
-      throw TemplateSyntaxError(tagName + ' tag's argument should be in quotes)
+    if (formatString[0] !== formatString.slice(-1) || ['"', "'"].indexOf(formatString[0]) &lt; 0) {
+      throw TemplateSyntaxError(tagName + " tag's argument should be in quotes")
     }
     return FormatTimeNode(dateToBeFormatted, formatString.slice(1, -1));
 }</code></pre>
@@ -353,7 +365,7 @@ variable to be resolved, and then call <code>variable.resolve(context)</code>. S
 for example:</p>
 
 
-<pre class="sh_javascript"><code>var {Variable} = require("reinhard/variable");
+<pre class="sh_javascript"><code>var {Variable} = require("reinhardt/variable");
 var FormatTimeNode = function(dateToBeFormatted, formatString) {
   this.dateToBeFormatted = new Variable(dateToBeFormatted, formatString)
   return this;

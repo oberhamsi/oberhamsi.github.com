@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<head>
+<title>VirtueJs</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://oberhamsi.github.io/virtuejs//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/virtuejs//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/virtuejs//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://oberhamsi.github.io/virtuejs//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://oberhamsi.github.io/virtuejs/" id="logo">VirtueJs</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://oberhamsi.github.io/virtuejs//stick.html">URL Routing</a>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/virtuejs//reinhardt.html">Templates</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/virtuejs//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/virtuejs//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/virtuejs//sqlstore.html">Database access</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/virtuejs//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/virtuejs//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/virtuejs//rp/Home.html">Ringo package manager</a>
+      </li>
+
+  </div>
+  <div id="content">
+      <h3>Querycache</h3>
+
+<p>SQLstore has its own <a href=" Query.html" title="custom query language ">[custom query language | Query]</a>. This is the result of one of the design goals of SQLstore: it should be possible to easily switch databases without having to adapt queries in application code. Think of developing an application using a H2 in-memory database and then, before release, switching to an Oracle database. SQLstore makes this possible by simply changing the connection parameters (JDBC url, driver and credentials).</p>
+
+<p>The main difference between SQLstore queries and plain SQL ones is that they don't reference tables or columns, but entities and properties, so when creating a query it's not necessary to remember which model property is mapped to which table column. The second benefit of SQLstore's custom query language is that it leverages the different SQL dialects used by database vendors (eg. the limit/offset syntax of Oracle is completely different to all other databases). SQLstore takes care of this by translating the query defined in an application into an SQL statement the target database can handle. Now obviously this translation step imposes overhead, and this is where the query cache kicks in.</p>
+
+<p>First, it's important to keep in mind that <strong>the query cache is not a query <em>result</em> cache</strong>, meaning it does not cache query results received from the database. To explain what the query cache actually does let's walk through the processing of a query done by SQLstore.</p>
+
+<p>Imagine somewhere in an application the following query is used:</p>
+
+<pre class="sh_javascript"><code>store.query("from Author a where a.pseudonym = :pseudonym", {
+    "pseudonym": "Mark Twain"
+});</code></pre>
+
+<p>When above method call is executed, the following happens inside SQLstore:</p>
+
+<ol><li><p>The query string <code>from Author a where a.pseudonym = :pseudonym</code> is parsed into an AST, which is a tree of nodes representing the different parts of the query. The resulting AST of the query looks (largely simplified) like this:</p>
+
+<pre class="sh_javascript"><code>[Select]
+    [FromClause]
+        [SelectEntity "Author"]
+    [WhereClause]
+        [Expression]
+            [Condition]
+                [Ident "a.pseudonym"]
+                [Comparison "="]
+                [ParameterValue ":pseudonym"]</code></pre></li>
+
+<li><p>Next SQLstore translates this AST into an SQL query suitable for the target database. This is done using an <code>SqlGenerator</code>, which visits every node in the AST, stores their SQL representation in a string buffer, and extracts and collects literal values contained in the original query.</p></li></ol>
+
+<h4>Query Parameter Values</h4>
+
+<p>There are two different ways to define parameter values in an SQLstore query: literal values and named parameters. The query</p>
+
+<pre class="sh_javascript"><code>from Author a where a.pseudonym = 'Mark Twain'</code></pre>
+
+<p>is equivalent to</p>
+
+<pre class="sh_javascript"><code>from Author a where a.pseudonym = :pseudonym</code></pre>
+
+<p>given that the value for <code>pseudonym</code> passed to the query method is "Mark Twain". However, if the former query would be constructed using unsanitized values received from outside the application (eg. a form submitted), the application using SQLstore would be vulnerable to SQL injection. To prevent this all literal values specified in a query are extracted by the SqlGenerator and replaced with <code>?</code>, the placeholder for positional statement parameters. Nevertheless for all executions of this query the value stays the same.</p>
+
+<p>Named parameters (<code>:pseudonym</code> in the latter query above) on the other hand are a means of retrieving the value of the placeholder <code>?</code> during execution of the query, using a plain JavaScript object containing the specified property. So basically the SqlGenerator remembers to use the value of the "pseudonym" property when constructing the JDBC prepared statement.</p>
+
+<p>Regardless of whether inline literal values or named parameters are used the resulting SQL query would look something like this:</p>
+
+<pre class="sh_javascript"><code>"SELECT `T_AUTHOR`.`AUTHOR_ID` FROM `T_AUTHOR` WHERE `T_AUTHOR`.`AUTHOR_NAME` = ?"</code></pre>
+
+<p>Values specified in the query are returned as an array in the order they appear in the original query, so the literal value 'Mark Twain' in the former query is translated into</p>
+
+<pre class="sh_javascript"><code>[{
+    "type": "string",
+    "value": "Mark Twain"
+}]</code></pre>
+
+<p>while the latter (<code>:pseudonym</code>) results in the even simpler construct</p>
+
+<pre class="sh_javascript"><code>[":pseudonym"]</code></pre>
+
+<p>At this stage the query is nearly ready to use, but SQLstore takes one more step: it dynamically creates a function that looks like this:</p>
+
+<pre class="sh_javascript"><code>function(nparams, getNamedParameter) {
+    return [
+        "SELECT `T_AUTHOR`.`AUTHOR_ID` FROM `T_AUTHOR` WHERE `T_AUTHOR`.`AUTHOR_NAME` = ?",
+        [getNamedParameter(nparams, "pseudonym")]
+    ];
+}</code></pre>
+
+<p>To get everything needed to create a JDBC prepared statement SQLstore just needs to call this function with two arguments: the object containing the named parameter values, and a helper function for lookup and conversion. This way it's possible to eg. use a date object as value of a named parameter, and the <code>getNamedParameter</code> function passed as second argument knows how to translate that into the final form (eg. a JDBC timestamp).</p>
+
+<p>At this point of query processing, SQLstore is ready for populating the query cache: it uses the original query as the cache key and associates a plain JavaScript object with it, containing both the generated AST and the above dynamically created function.</p>
+
+<p>So whenever the same query string is used again, SQLstore does a cache lookup, and if it results in a hit all of the steps above are skipped.</p>
+
+<p>Read on about <a href=" Collectors.html" title="how SQLstore handles query results ">[how SQLstore handles query results | Collectors]</a>.</p>
+
+
+  </div>
+</div>
+
+</body>
+

@@ -57,17 +57,34 @@
 
   </div>
   <div id="content">
-      <h1>rp help</h1>
+      
+            <h1 class="modulename">Module stick/middleware/cors</h1>
+        <div class="fileoverview">
+            <p>Cross-site HTTP Request headers</p>
 
-<pre class="sh_javascript"><code>rp help</code></pre>
-
-<h2>Description</h2>
-
-<p>When called without arguments <code>rp help</code> displays a list of available commands (similar if <code>rp</code> is executed without any arguments).</p>
-
-<p>To get a detailed description of a command and its options use <code>rp help &lt;command&gt;</code>.</p>
+<p>Ability to configure all CORS headers. For a detailed explanation
+on what the different headers do see
+<a href="https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS">MDN on CORS</a></p>
 
 
+        </div>
+
+                <div>
+            <h4> Example </h4>
+            <pre class="sh_javascript sh_sourceCode">app.configure("cors");
+app.cors({
+   allowOrigin: ['http://example.com', 'https://example.com'],
+   allowMethods: ['POST', 'GET'],
+   allowHeaders: ['X-PingOther'],
+   exposeHeaders: []
+   maxAge: 1728000,
+   allowCredentials: true
+})</pre>
+        </div>
+        <div class="classoverview">
+
+            </div>
+    
   </div>
 </div>
 
