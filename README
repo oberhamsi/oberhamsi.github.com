@@ -5,7 +5,7 @@
 
 And to build the html site I suggest you use those settings:
 
-   $ ./build.js -c ./site/ -b http://localhost/virtuejs/ -o ./virtuejs/
+   $ ./build.js -c ./site/ -b http://localhost/ringoallstar/ -o /usr/local/htdocs/ringoallstar/
 
 
   * -c input directory
@@ -15,7 +15,7 @@ And to build the html site I suggest you use those settings:
 
 # modifying/adding to the site
 
-All markdown files in the folder ./site/ are processed using the master template "./templates/master.html" to generate the HTML files in ./virtuejs/
+All markdown files in the folder ./site/ are processed using the master template "./templates/master.html" to generate the HTML files in /usr/local/htdocs/ringoallstar/
 
 If you have a project with markdown documentation, it is fairly easy to add it. Submodule clone it into the ./external/ folder and make a symlink from site to your new project checkout.
 

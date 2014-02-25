@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<head>
+<title>Ringo &amp; His All-Star Band</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://oberhamsi.github.io/ringoallstar/" id="logo">Ringo &amp; <br/>His All-Star Band</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//stick.html">Stick</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar///stick/middleware/route/">URL Routing</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//reinhardt.html">Reinhardt</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//sqlstore.html">Sqlstore</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//rp/Home.html">Package manager</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/install.html">Install package</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/publish.html">Publish</a>
+          </li>
+        </ul>
+      </li>
+
+  </div>
+  <div id="content">
+      <h3>Entity cache</h3>
+
+<p>SQLstore features an entity cache to avoid issuing multiple SQL statements for the same objects. The entity cache (aka object cache) is an LRU type which has a default size of 1000 objects. Every entity retrieved, be it when resolving an object mapping, populating a collection or when manually querying using <code>query()</code>, is put into this cache.</p>
+
+<p>If using Ringo SQLstore in a multithreaded environment (which is the case for most RingoJS applications), all caches should be instantiated as singletons. After instantiation, the cache can be put into action by calling the store's <code>setEntityCache()</code> method:</p>
+
+<pre class="sh_javascript"><code>var {Store, ConnectionPool, Cache} = require("ringo-sqlstore");
+var entityCache = module.singleton("entityCache", function() {
+    // the argument defines the cache size
+    return new Cache(1000);
+});
+var connectionPool = module.singleton("connectionCache", function() {
+    return new ConnectionPool({
+        "url": "jdbc:h2:mem:test",
+        "driver": "org.h2.Driver"
+    });
+});
+var store = new Store(connectionPool);
+store.setEntityCache(entityCache);</code></pre>
+
+<p><a href=" Collectors.html" title="This page ">[This page | Collectors]</a> explains in detail how SQLstore retrieves values received from the database and utilizes the object cache.</p>
+
+<h3>Query cache</h3>
+
+<p>Ringo SQLstore can use a second cache for performance gains - the query cache. If defined all queries, regardless whether specified in mapping definitions or in <code>store.query(…)</code> calls, are parsed only once and put into this cache. As with the entity cache, it should be instantiated as a singleton:</p>
+
+<pre class="sh_javascript"><code>var {Store, ConnectionPool, Cache} = require("ringo-sqlstore");
+var queryCache = module.singleton("queryCache", function() {
+    // the argument defines the cache size
+    return new Cache(1000);
+});
+var connectionPool = module.singleton("connectionCache", function() {
+    return new ConnectionPool({
+        "url": "jdbc:h2:mem:test",
+        "driver": "org.h2.Driver"
+    });
+});
+var store = new Store(connectionPool);
+store.setQueryCache(queryCache);</code></pre>
+
+<p>Query processing and the effect of the query cache is explained in detail on <a href=" Querycache.html" title="this page ">[this page | Querycache]</a>.</p>
+
+
+
+  </div>
+</div>
+
+</body>
+

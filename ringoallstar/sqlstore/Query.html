@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<head>
+<title>Ringo &amp; His All-Star Band</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://oberhamsi.github.io/ringoallstar/" id="logo">Ringo &amp; <br/>His All-Star Band</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//stick.html">Stick</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar///stick/middleware/route/">URL Routing</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//reinhardt.html">Reinhardt</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//sqlstore.html">Sqlstore</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//rp/Home.html">Package manager</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/install.html">Install package</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/publish.html">Publish</a>
+          </li>
+        </ul>
+      </li>
+
+  </div>
+  <div id="content">
+      <h1>Queries</h1>
+
+<h2>.all()</h2>
+
+<p>Every entity defined in SQLstore has one method to retrieve all persisted instances:</p>
+
+<pre class="sh_javascript"><code>store.defineEntity("Author", {
+    "properties": {
+        "name": "string"
+    }
+});
+// ... create and persist instances
+var authors = Author.all();</code></pre>
+
+<p><code>.all()</code> is a convenient equivalent of <code>store.select("from Author")</code> (see below).</p>
+
+
+<h2>SQLstore query language</h2>
+
+<p>SQLstore's query language is very similar to plain SQL, the only differences are:</p>
+
+<ul><li>Instead of referencing tables and columns, entities and properties are used</li>
+<li>Entity properties must be referenced fully qualified, so every property must be prefixed with either the entity name or an alias</li>
+<li>Values inside a query are referenced by name, not by position</li>
+<li>Queries can return entities and/or entity values</li></ul>
+
+<p>Entity and property names are case sensitive, everything else in a query is case insensitive.</p>
+
+
+<h3>Querying</h3>
+
+<p>All queryies are issued by calling the store's instance method <code>query(str)</code>.  In difference to plain SQL the <code>select</code> part of a query can be omitted when retrieving entity instances:</p>
+
+<pre class="sh_javascript"><code>store.query("from Author")</code></pre>
+
+<p>is equivalent to</p>
+
+<pre class="sh_javascript"><code>store.query("select Author from Author")</code></pre>
+
+<p>and will return all persisted instances of the Author entity (in fact, this is the same as calling <code>Author.all()</code>).</p>
+
+
+<h3>Query results</h3>
+
+<p>The result of a query is always an Array, even if just one entity or value has been found in the underlying database.</p>
+
+<p>If a single entity or value has been selected (or if the select clause has been omitted as in the first example above), the Array contains the selected entities or values:</p>
+
+<pre class="sh_javascript"><code>store.query("from Author");
+// =&gt; [[Author#1], [Author#2], [Author#3]]
+store.query("select Author.id from Author")
+// =&gt; [1, 2, 3]</code></pre>
+
+<p>If more than one entity or value has been selected, the result array contains an object for each result, where each selected entity/value is stored in a property whose name equals the part of the select clause:</p>
+
+<pre class="sh_javascript"><code>store.query("select Author.id, Author.name from Author");</code></pre>
+
+<p>returns</p>
+
+<pre class="sh_javascript"><code>[
+    {
+        "Author.id": 1,
+        "Author.name": "John Doe"
+    },
+    {
+        "Author.id": 2,
+        "Author.name": "Jane Foo"
+    }
+]</code></pre>
+
+<p>The same is used when selecting multiple entities at once. In this case the property value is the selected entity instance:</p>
+
+<pre class="sh_javascript"><code>store.query("select Author, Book from Author, Book where Book.author = Author.id");</code></pre>
+
+<p>returns</p>
+
+<pre class="sh_javascript"><code>[
+    {
+        "Author": [Author#1],
+        "Book": [Book#1]
+    },
+    {
+        "Author": [Author#2],
+        "Book": [Book#2]
+    }
+]</code></pre>
+
+
+<h3>Aggressive/eager entity queries</h3>
+
+<p>Normally SQLstore loads entity values in a lazy manner, meaning that the resulting entity values are populated on first access. Of course this means that for every entity a separate SQL statement is issued to retrieve the property values. Since this can be quite expensive when eg. looping over large results and accessing a property other than <code>_id</code> of all entities, SQLstore supports a different way of selecting entities:</p>
+
+<pre class="sh_javascript"><code>store.query("select Author.* from Author")</code></pre>
+
+<p>Using a query like the above will immediately populate all entities, so no more queries are needed to retrieve the property values of the resulting entity instances.</p>
+
+
+<h3>Aliasing entities</h3>
+
+<p>SQLstore's query language supports aliases in the same manner as used in SQL:</p>
+
+<pre class="sh_javascript"><code>store.query("select a from Author as a")
+// the 'as' keyword is optional
+store.query("select a from Author a")</code></pre>
+
+<p>Entity aliases should start with a lowercase letter, since this follows the Javascript convention for property names.</p>
+
+
+<h3>The where clause</h3>
+
+<p><code>where</code>-clauses have the same form as in SQL (with the exception that expressions contain property names instead of columns):</p>
+
+<pre class="sh_javascript"><code>// select the author with ID 1:
+store.query("from Author where Author.id = 1")
+
+// select all authors whose name starts with "John":
+store.query("from Author where Author.name like 'John%'")
+
+// aliasing the entity in the from clause:
+store.query("select a.id from Author a where a.name like 'John%'")</code></pre>
+
+<p>Keep in mind that property names must be prefixed with the entity name they belong to (or its alias), so the following won't work:</p>
+
+<pre class="sh_javascript"><code>// this query can't be parsed
+store.query("from Author where id = 1")</code></pre>
+
+<p>Also, SQLstore's query language doesn't support referencing properties of 1:1 mappings of an entity, so the following won't work either (assuming that the Book entity has a reference to the appropriate author):</p>
+
+<pre class="sh_javascript"><code>store.query("select b.author.id from Book b")</code></pre>
+
+<p>The where clause can be as simple or complex as known in SQL, including nested parenthesis, arithmetic operations, subqueries, <code>in (…)</code> expressions and the like.</p>
+
+
+<h3>Other clauses</h3>
+
+<p>SQLstore's query language supports the following SQL clauses:</p>
+
+<ul><li>join (inner and left/right outer joins)</li>
+<li>order by</li>
+<li>group by</li>
+<li>having</li></ul>
+
+<p>The syntax for these is the same as in SQL.</p>
+
+
+<h3>Offsets and limits</h3>
+
+<p>SQLstore provides a uniform way of specifying result ranges, which are internally converted into the database specific form:</p>
+
+<pre class="sh_javascript"><code> // retrieve the last 10 author instances
+ store.query("from Author a order by a.id desc limit 10")
+ // retrieve the next 10 instances
+ store.query("from Author a order by a.id desc limit 10 offset 10")</code></pre>
+
+
+<h3>Literal values in queries</h3>
+
+<p>Literal values (strings, numbers, booleans) in a query can be specified as in Javascript. When parsing queries SQLstore will extract these literals into a parameter array and use this within a Java "prepared statement". The benefit of this is that SQL injection isn't possible (however this shouldn't be an excuse for not sanitizing these values beforehand, think of it as an additional security mechanism).</p>
+
+
+<h3>Named parameters in queries</h3>
+
+<p>In contrast to SQL, where values in a prepared statement are referenced by their position in an array of values, SQLstore supports <em>named parameters</em>. These named parameters start with a colon followed by the name of a parameter object's property containing the value to use. This parameter object must be passed as second argument to the store's <code>query()</code> method.</p>
+
+<pre class="sh_javascript"><code>var queryStr = "from Book b where b.releaseDate &lt; :timestamp";
+var params = {"timestamp": new Date()}
+store.query(queryStr, params)</code></pre>
+
+<p>Using named parameters is especially useful when dealing with values that don't have a literal form (like the Date instance in the example above). As with literal values defined in query statements SQLstore will use a prepared statement in conjuction with a parameter value array when issueing the statement to the underlying database.</p>
+
+
+<h3>Agregation functions</h3>
+
+<p>SQLstore supports aggregations using the following functions:</p>
+
+<ul><li>MAX(…)</li>
+<li>MIN(…)</li>
+<li>SUM(…)</li>
+<li>COUNT(…)</li>
+<li>COUNT(DISTINCT …)</li></ul>
+
+<p>Aggregation functions can be used in conjunction with arithmetic operators like</p>
+
+<pre class="sh_javascript"><code>select max(Author.id) + 1 from Author</code></pre>
+
+<p>Aggregations can also be used in having clauses, again in conjunction with arithmetic operators if needed.</p>
+
+
+
+  </div>
+</div>
+
+</body>
+

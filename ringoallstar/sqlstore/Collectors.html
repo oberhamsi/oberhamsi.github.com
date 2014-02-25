@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<head>
+<title>Ringo &amp; His All-Star Band</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://oberhamsi.github.io/ringoallstar/" id="logo">Ringo &amp; <br/>His All-Star Band</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//stick.html">Stick</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar///stick/middleware/route/">URL Routing</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//reinhardt.html">Reinhardt</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//sqlstore.html">Sqlstore</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//rp/Home.html">Package manager</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/install.html">Install package</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/publish.html">Publish</a>
+          </li>
+        </ul>
+      </li>
+
+  </div>
+  <div id="content">
+      <h3>Collecting Query Results</h3>
+
+<p>As <a href=" Querycache.html" title="described ">[described | Querycache]</a> SQLstore parses queries specified in an application into an AST. This AST is not only used to create SQL queries, but also to prepare the processing of query statement results by creating so-called <em>Collectors</em>.</p>
+
+<p>A collector is basically a function that receives a single result row and returns a JavaScript object with the column names as property names and the JDBC value translated into its JavaScript equivalent as values.</p>
+
+<p>SQLstore has three different types of collectors, which are created based on the <code>select</code> portion of the query:</p>
+
+<h4>ValueCollector</h4>
+
+<p>The simplest type of collector is the <code>ValueCollector</code>. Its job is basically to retrieve column values in a JDBC resultset row, convert them and return an object containing these values. So the query</p>
+
+<pre class="sh_javascript"><code>select Author.birthdate from Author where Author.name = 'Mark Twain'</code></pre>
+
+<p>would be translated into the following SQL query:</p>
+
+<pre class="sh_javascript"><code>SELECT `Author`.`birthdate` FROM `Author` WHERE `Author`.`name` = ?</code></pre>
+
+<p>(the placeholder <code>?</code> is representing the string "Mark Twain"). Based on the AST of the above query SQLstore knows that every resultset row will contain a single value, and that it should just collect them. So it creates an instance of <code>ValueCollector</code>.</p>
+
+<p>When SQLstore receives the JDBC result set for the executed query, it loops over all its rows, calling the <code>collect()</code> method of the ValueCollector for each of them. This method retrieves the values from the resultset rows, converts them into their JavaScript equivalent and returns them.</p>
+
+<p>In this example the result of the query is an array containing a single Date object with the birthdate of the author (note that all queries in SQLstore return an array, even if the query resulted in a single value, as in this example).</p>
+
+<p>If the <code>select</code> portion of the query contains more than one property, the resulting array would contain one or more objects, each of them containing the received values stored in properties named after the relevant part of the select clause, eg.:</p>
+
+<pre class="sh_javascript"><code>{
+    "Author.name": "Mark Twain",
+    "Author.birthdate": new Date(1835, 10, 30, 0, 0, 0, 0)
+}</code></pre>
+
+<p>If the query uses column resultset names (eg. <code>select Author.birthdate as birthdate …</code>), the specified alias is used as property name.</p>
+
+<h4>EntityCollector</h4>
+
+<p>EntityCollectors are used whenever an application needs to retrieve an entity from the database. Entities in SQLstore are loaded lazily, so what's actually retrieved from the database is just the ID of the entity, nothing more. Imagine the query</p>
+
+<pre class="sh_javascript"><code>from Author where Author.id = 1</code></pre>
+
+<p>This query is translated into an SQL query looking something like this:</p>
+
+<pre class="sh_javascript"><code>SELECT `Author`.`id` FROM `Author` WHERE `Author`.`id` = ?</code></pre>
+
+<p>(the value <code>1</code> is used as JDBC prepared statement value for the placeholder <code>?</code>). Using the AST of this query SQLstore determines that the query result rows it will receive from the database will contain just a single value, the ID of the <code>Author</code> entity to construct. So it creates an instance of <code>EntityCollector</code>, loops over the received JDBC result set and calls the collector's <code>collect()</code> method for each of them. Inside the <code>collect()</code> method the following happens:</p>
+
+<ol><li>If the <a href=" Caches.html" title="Entity Cache ">[Entity Cache | Caches]</a> is enabled, it checks if it contains an entry for the key <code>Author#1</code> (the cache key consists of the entity constructor's name and the ID, separated by a hash sign). If the cache has an entry for this key, the value is retrieved and SQLstore skips to step 3 below.</li>
+<li>The ID value in the resultset row is retrieved and converted into a JavaScript number. Using this an entity key is constructed (these keys are the primary identifiers of entities within SQLstore).</li>
+<li>An instance of the <code>Author</code> entity is created, passing at least the key as argument. If the property values of this Author instance have already been retrieved and cached before, the newly created instance is right away populated with the data, otherwise <code>null</code> as data argument is passed to the entity constructor. Finally the <code>collect</code> method returns the created <code>Author</code> instance.</li></ol>
+
+<p>The result returned to the application issueing the query is an array containing these entity instances.</p>
+
+<h4>AggressiveEntityCollector</h4>
+
+<p>Imagine a query</p>
+
+<pre class="sh_javascript"><code>select Author.* from Author where Author.id = 1</code></pre>
+
+<p>First SQLstore translates this query into something like the following:</p>
+
+<pre class="sh_javascript"><code>SELECT `Author`.`id`, `Author`.`name`, `Author`.`birthdate` FROM `Author` WHERE `Author`.`id` = ?</code></pre>
+
+<p>As you see, <code>Author.*</code> has been expanded into all columns defined in the Author mapping. Based on this expanded <code>select</code> clause of the query's AST SQLstore knows that the resultset rows it will receive from the database will contain <strong>all</strong> columns defined in the <code>Author</code> table.</p>
+
+<p>Similar to the <code>EntityCollector</code> this type of collector has a <code>collect()</code> method, which does the following:</p>
+
+<ol><li>If the entity cache is enabled, it checks if it contains an entry for the key <code>Author#1</code>. If the cache has an entry for this key, the value is retrieved from the cache and SQLstore skips to step 3 below.</li>
+<li>SQLstore loops over all columns defined in the <code>Author</code> entity mapping and retrieves the values from the resulset row received from the database. These values are stored in an object that roughly looks like this:
+
+<pre class="sh_javascript"><code>{
+    "id": 1,
+    "name": "Mark Twain",
+    "birthdate": new Date(1835, 10, 30, 0, 0, 0, 0)
+}</code></pre>
+
+In addition an entity key is created (it contains the constructor name <code>Author</code> and the ID of the record). Both the key and the data object are put into the entity cache (if enabled, of course).</li>
+<li>As with the <code>EntityCollector</code> above, the <code>collect()</code> method creates a new <code>Author</code> instance, passing it the key and the data object, and returns it.</li></ol>
+
+<p>The result of this collector is the same as the one of the <code>EntityCollector</code> above: an array containing <code>Author</code> instances, but this time they already contain the complete data stored in the database, so SQLstore doesn't need to access the database again just to retrieve an author's data.</p>
+
+<h4>The Contents of the Entity Cache</h4>
+
+<p>It's important to keep in mind that SQLstore doesn't cache created entity instances (ie. instances of the <code>Author</code> constructor) in its entity cache. The reason for this is that RingoJS applications are mostly multi-threaded, and the entity cache is shared among all application threads.</p>
+
+<p>Imagine two threads accessing the same <code>Author</code> instance. If the cache would contain the final entity instances, both threads would operate on the same instance. Now if one of them would modify the author, the change would immediately be visible to the other thread, thus changing its context. To prevent that every thread in an application receives its <em>own instance</em> of an entity, each of them wrapping a shared object containing the data received from the database for it.</p>
+
+<p>What happes if one thread modifies its <code>Author</code> instance and commits it into the datase is that the <em>data object</em> for this instance (containing the new data) is put into the entity cache, replacing the former cached data object. This however doesn't affect the other running thread, since its <code>Author</code> instance still wraps the former version of the data object. This effectively separates the threads of an  application and avoids all sorts of concurrency problems.</p>
+
+<p>To sum it up every entity instance consists of two objects: a short living entity wrapping a long living data object.</p>
+
+
+  </div>
+</div>
+
+</body>
+

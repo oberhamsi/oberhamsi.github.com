@@ -72,7 +72,7 @@ if (require.main === module) {
    var masterTemplatePath = module.resolve('./templates/master.html');
    var masterContent = fs.read(masterTemplatePath);
    if (!opts.outputdir) {
-      opts.outputdir = module.resolve('./virtuejs')
+      opts.outputdir = module.resolve('./ringoallstar')
    }
    traverse(opts.contentdir);
    fs.copyTree(module.resolve('./static'), fs.join(opts.outputdir, 'static/'));

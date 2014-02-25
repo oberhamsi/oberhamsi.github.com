@@ -1,6 +1,4 @@
-# VirtueJs
-
-VirtueJs is a loosely coupled web application framework on top of [RingoJs](http://ringojs.org). It pulls together the best of breed Ringo packages to provide templating, a view engine and an ORM.
+Ringo & His Band help you build websites on top of [RingoJs](http://ringojs.org). It pulls together a couple of Ringo packages to provide templating, a view engine and an ORM.
 
 ## What's cool about it?
 

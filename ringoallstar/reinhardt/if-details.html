@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<head>
+<title>Ringo &amp; His All-Star Band</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://oberhamsi.github.io/ringoallstar/" id="logo">Ringo &amp; <br/>His All-Star Band</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//stick.html">Stick</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar///stick/middleware/route/">URL Routing</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//reinhardt.html">Reinhardt</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//sqlstore.html">Sqlstore</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//rp/Home.html">Package manager</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/install.html">Install package</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/publish.html">Publish</a>
+          </li>
+        </ul>
+      </li>
+
+  </div>
+  <div id="content">
+      <h1>"if" tag details</h1>
+
+<p>This document describes the operator details of the if tag.</p>
+
+<p><strong>Table of Contents</strong></p>
+
+<ul><li><a href="#boolean-operators">Boolean operators</a></li>
+<li><a href="#-operator">== operator</a></li>
+<li><a href="#-operator-1">!= operator</a></li>
+<li><a href="#-operator-2">< operator</a></li>
+<li><a href="#-operator-3">> operator</a></li>
+<li><a href="#-operator-4"><= operator</a></li>
+<li><a href="#-operator-5">>= operator</a></li>
+<li><a href="#in-operator">in operator</a></li>
+<li><a href="#not-in-operator">not in operator</a></li>
+<li><a href="#filters">Filters</a></li>
+<li><a href="#complex-expressions">Complex expressions</a></li></ul>
+
+<h2>Boolean operators</h2>
+
+<p><code>if</code> tags may use <code>and</code>, <code>or</code> or <code>not</code> to test a number of
+variables or to negate a given variable:</p>
+
+<pre class="sh_javascript"><code>{% if athlete_list and coach_list %}
+    Both athletes and coaches are available.
+{% endif %}
+
+{% if not athlete_list %}
+    There are no athletes.
+{% endif %}
+
+{% if athlete_list or coach_list %}
+    There are some athletes or some coaches.
+{% endif %}
+
+{% if not athlete_list or coach_list %}
+    There are no athletes or there are some coaches (OK, so
+    writing English translations of boolean logic sounds
+    stupid; it's not our fault).
+{% endif %}
+
+{% if athlete_list and not coach_list %}
+    There are some athletes and absolutely no coaches.
+{% endif %}</code></pre>
+
+<p>Use of both <code>and</code> and <code>or</code> clauses within the same tag is allowed, with
+<code>and</code> having higher precedence than <code>or</code> e.g.:</p>
+
+<pre class="sh_javascript"><code>{% if athlete_list and coach_list or cheerleader_list %}</code></pre>
+
+<p>will be interpreted like:</p>
+
+<pre class="sh_javascript"><code>if (athlete_list and coach_list) or cheerleader_list</code></pre>
+
+<p>Use of actual parentheses in the <code>if</code> tag is invalid syntax.  If you need
+them to indicate precedence, you should use nested <code>if</code> tags.</p>
+
+<p><code>if</code> tags may also use the operators <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>,
+<code>&lt;=</code>, <code>&gt;=</code> and <code>in</code> which work as follows:</p>
+
+
+<h2><code>==</code> operator</h2>
+
+<p>Equality. Example:</p>
+
+<pre class="sh_javascript"><code>{% if somevar == "x" %}
+  This appears if variable somevar equals the string "x"
+{% endif %}</code></pre>
+
+<h2><code>!=</code> operator</h2>
+
+<p>Inequality. Example:</p>
+
+<pre class="sh_javascript"><code>{% if somevar != "x" %}
+  This appears if variable somevar does not equal the string "x",
+  or if somevar is not found in the context
+{% endif %}</code></pre>
+
+<h2><code>&lt;</code> operator</h2>
+
+<p>Less than. Example:</p>
+
+<pre class="sh_javascript"><code>{% if somevar &lt; 100 %}
+  This appears if variable somevar is less than 100.
+{% endif %}</code></pre>
+
+<h2><code>&gt;</code> operator</h2>
+
+<p>Greater than. Example:</p>
+
+<pre class="sh_javascript"><code>{% if somevar &gt; 0 %}
+  This appears if variable somevar is greater than 0.
+{% endif %}</code></pre>
+
+<h2><code>&lt;=</code> operator</h2>
+
+<p>Less than or equal to. Example:</p>
+
+<pre class="sh_javascript"><code>{% if somevar &lt;= 100 %}
+  This appears if variable somevar is less than 100 or equal to 100.
+{% endif %}</code></pre>
+
+<h2><code>&gt;=</code> operator</h2>
+
+<p>Greater than or equal to. Example:</p>
+
+<pre class="sh_javascript"><code>{% if somevar &gt;= 1 %}
+  This appears if variable somevar is greater than 1 or equal to 1.
+{% endif %}</code></pre>
+
+<h2><code>in</code> operator</h2>
+
+<p>Contained within. This operator is supported by many Python containers to test
+whether the given value is in the container.  The following are some examples
+of how <code>x in y</code> will be interpreted:</p>
+
+<pre class="sh_javascript"><code>{% if "bc" in "abcdef" %}
+  This appears since "bc" is a substring of "abcdef"
+{% endif %}
+
+{% if "hello" in greetings %}
+  If greetings is a list or set, one element of which is the string
+  "hello", this will appear.
+{% endif %}
+
+{% if user in users %}
+  If users is a QuerySet, this will appear if user is an
+  instance that belongs to the QuerySet.
+{% endif %}</code></pre>
+
+<h2><code>not in</code> operator</h2>
+
+<p>Not contained within.  This is the negation of the <code>in</code> operator.</p>
+
+
+<p>The comparison operators cannot be 'chained' like in Python or in mathematical
+notation. For example, instead of using:</p>
+
+<pre class="sh_javascript"><code>{% if a &gt; b &gt; c %}  (WRONG)</code></pre>
+
+<p>you should use:</p>
+
+<pre class="sh_javascript"><code>{% if a &gt; b and b &gt; c %}</code></pre>
+
+
+<h2>Filters</h2>
+
+<p>You can also use filters in the <code>if</code> expression. For example:</p>
+
+<pre class="sh_javascript"><code>{% if messages|length &gt;= 100 %}
+   You have lots of messages today!
+{% endif %}</code></pre>
+
+<h2>Complex expressions</h2>
+
+<p>All of the above can be combined to form complex expressions. For such
+expressions, it can be important to know how the operators are grouped when the
+expression is evaluated - that is, the precedence rules.  The precedence of the
+operators, from lowest to highest, is as follows:</p>
+
+<ul><li><code>or</code></li>
+<li><code>and</code></li>
+<li><code>not</code></li>
+<li><code>in</code></li>
+<li><code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li></ul>
+
+<p>So, for example, the following complex
+<code>if</code> tag:</p>
+
+<pre class="sh_javascript"><code>{% if a == b or c == d and e %}</code></pre>
+
+<p>...will be interpreted as:</p>
+
+<pre class="sh_javascript"><code>(a == b) or ((c == d) and e)</code></pre>
+
+<p>If you need different precedence, you will need to use nested <code>if</code> tags.
+Sometimes that is better for clarity anyway, for the sake of those who do not
+know the precedence rules.</p>
+
+
+  </div>
+</div>
+
+</body>
+

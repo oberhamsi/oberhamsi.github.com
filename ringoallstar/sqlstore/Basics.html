@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<head>
+<title>Ringo &amp; His All-Star Band</title>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,600&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/main.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/tutorial.css" />
+<link rel="stylesheet" href="http://oberhamsi.github.io/ringoallstar//static/sh_hns.css" />
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_main.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/sh_javascript.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/jquery.js"></script>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/main.js"></script>
+
+<!--[if lte IE 8]>
+<script type="text/javascript" src="http://oberhamsi.github.io/ringoallstar//static/html5.js"></script>
+<![endif]-->
+
+</head>
+<body onload="sh_highlightDocument()">
+
+<div id="container">
+  <div id="nav">
+      <div id="header">
+        <a href="http://oberhamsi.github.io/ringoallstar/" id="logo">Ringo &amp; <br/>His All-Star Band</a>
+      </div>
+    <ul id="sections">
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//stick.html">Stick</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar///stick/middleware/route/">URL Routing</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//reinhardt.html">Reinhardt</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/tags.html">Tag reference</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//reinhardt/filters.html">Filter reference</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//sqlstore.html">Sqlstore</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Mapping.html">Mapping</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//sqlstore/Query.html">Queries</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="http://oberhamsi.github.io/ringoallstar//rp/Home.html">Package manager</a>
+        <ul>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/install.html">Install package</a>
+          </li>
+          <li>
+            <a href="http://oberhamsi.github.io/ringoallstar//rp/publish.html">Publish</a>
+          </li>
+        </ul>
+      </li>
+
+  </div>
+  <div id="content">
+      <h1>Requirements</h1>
+
+<p>Depending on the database you want to use you need to place the driver .jar file into the "jars" subdirectory of ringo-sqlstore.</p>
+
+<p><strong>Important:</strong> sqlstore expects driver files named "mysql.jar", "oracle.jar" resp. "postgresql.jar".</p>
+
+<h1>Basics</h1>
+
+<p>Setting up Ringo SQLstore is done in a few lines of code. Require the module, create an instance of ConnectionPool with the connection parameters as argument and pass it to the Store constructor:</p>
+
+<pre class="sh_javascript"><code>var {ConnectionPool, Store} = require("ringo-sqlstore");
+var connectionPool = module.singleton("connectionPool", function() {
+    return new ConnectionPool({
+        "url": "jdbc:h2:mem:test",
+        "driver": "org.h2.Driver"
+    });
+});
+var store = new Store(connectionPool);</code></pre>
+
+<p>The above example would operate on a H2 in-memory database, which is created when the first connection to the database is opened. An example for an existing MySQL database "test" would look like this:</p>
+
+<pre class="sh_javascript"><code>var connectionPool = module.singleton("connectionPool", function() {
+    return new ConnectionPool({
+        "url": "jdbc:mysql://localhost/test",
+        "driver": "com.mysql.jdbc.Driver",
+        "username": "test",
+        "password": "test"
+    });
+});
+var store = new Store(connectionPool);</code></pre>
+
+<p>Within one application you can instantiate as many stores as needed, each operating on it's own database. Once the store is set up correctly, you should continue <a href="Mapping">defining entities</a> managed by this store instance.</p>
+
+<h2>Why using a singleton for ConnectionPool?</h2>
+
+<p>The above examples instantiate the connection pool as a singleton, meaning it will be created only once, regardless how many threads an application uses. This is important: if Ringo SQLstore is used in a multithreaded application, it is viable to use a singleton for the connection pool, otherwise every new thread started in the application would create its own pool, and basically render the connection pool useless.</p>
+
+<p>The same applies to the two caches SQLstore can utilize. Read more about them in the <a href="Caches">caches section</a></p>
+
+
+  </div>
+</div>
+
+</body>
+
